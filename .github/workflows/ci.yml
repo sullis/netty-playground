@@ -24,5 +24,7 @@ jobs:
         java-version: ${{ matrix.java }}
         distribution: 'zulu'
         cache: 'maven'
+    - name: ulimit
+      run: ulimit -l
     - name: Build
       run: mvn --no-transfer-progress -B clean test
