@@ -16,5 +16,6 @@ public class IoUringTest {
                 System.err.println("unavailabilityCause: " + ExceptionUtils.getStackTrace(cause));
             }
         }
+        System.out.println("IOUring.isAvailable: " + IOUring.isAvailable());
     }
 }
