@@ -6,6 +6,11 @@ import org.junit.jupiter.api.Test;
 
 import io.netty.incubator.channel.uring.IOUring;
 
+/**
+ *
+ *  Netty io_uring transport on Linux
+ *
+ */
 public class IoUringTest {
     @Test
     public void testUringTransport() {
