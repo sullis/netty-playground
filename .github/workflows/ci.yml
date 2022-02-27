@@ -27,4 +27,4 @@ jobs:
     - name: ulimit
       run: ulimit -l
     - name: Build
-      run: sudo env "PATH=$PATH" bash -c "ulimit -l 65536 && ulimit -a && mvn --no-transfer-progress -B clean test"
+      run: sudo -E env "PATH=$PATH" bash -c "ulimit -l 65536 && ulimit -a && mvn --no-transfer-progress -B clean test"
