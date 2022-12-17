@@ -22,6 +22,17 @@
     <skip.tests>false</skip.tests>
   </properties>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.netty</groupId>
+        <artifactId>netty-bom</artifactId>
+        <version>4.1.86.Final</version>
+        <type>pom</type>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <dependencies>
     <dependency>
         <groupId>io.netty.incubator</groupId>
