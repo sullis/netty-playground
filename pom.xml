@@ -19,6 +19,7 @@
     <junit.version>5.9.2</junit.version>
     <logback.version>1.2.11</logback.version>
     <slf4j.version>1.7.36</slf4j.version>
+    <tcnative.version>2.0.56.Final</tcnative.version>
     <skip.tests>false</skip.tests>
   </properties>
 
@@ -34,12 +35,47 @@
   </dependencyManagement>
 
   <dependencies>
-    <dependency>
-        <groupId>io.netty.incubator</groupId>
-        <artifactId>netty-incubator-transport-native-io_uring</artifactId>
-        <version>0.0.16.Final</version>
-        <classifier>linux-x86_64</classifier>
-    </dependency>
+      <dependency>
+          <groupId>io.netty</groupId>
+          <artifactId>netty-tcnative-boringssl-static</artifactId>
+          <version>${tcnative.version}</version>
+      </dependency>
+      <dependency>
+          <groupId>io.netty</groupId>
+          <artifactId>netty-tcnative-boringssl-static</artifactId>
+          <version>${tcnative.version}</version>
+          <classifier>linux-x86_64</classifier>
+      </dependency>
+      <dependency>
+          <groupId>io.netty</groupId>
+          <artifactId>netty-tcnative-boringssl-static</artifactId>
+          <version>${tcnative.version}</version>
+          <classifier>linux-aarch_64</classifier>
+      </dependency>
+      <dependency>
+          <groupId>io.netty</groupId>
+          <artifactId>netty-tcnative-boringssl-static</artifactId>
+          <version>${tcnative.version}</version>
+          <classifier>osx-x86_64</classifier>
+      </dependency>
+      <dependency>
+          <groupId>io.netty</groupId>
+          <artifactId>netty-tcnative-boringssl-static</artifactId>
+          <version>${tcnative.version}</version>
+          <classifier>osx-aarch_64</classifier>
+      </dependency>
+      <dependency>
+          <groupId>io.netty</groupId>
+          <artifactId>netty-tcnative-boringssl-static</artifactId>
+          <version>${tcnative.version}</version>
+          <classifier>osx-aarch_64</classifier>
+      </dependency>
+      <dependency>
+          <groupId>io.netty.incubator</groupId>
+          <artifactId>netty-incubator-transport-native-io_uring</artifactId>
+          <version>0.0.16.Final</version>
+          <classifier>linux-x86_64</classifier>
+      </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
