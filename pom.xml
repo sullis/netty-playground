@@ -65,12 +65,6 @@
           <classifier>osx-aarch_64</classifier>
       </dependency>
       <dependency>
-          <groupId>io.netty</groupId>
-          <artifactId>netty-tcnative-boringssl-static</artifactId>
-          <version>${tcnative.version}</version>
-          <classifier>osx-aarch_64</classifier>
-      </dependency>
-      <dependency>
           <groupId>io.netty.incubator</groupId>
           <artifactId>netty-incubator-transport-native-io_uring</artifactId>
           <version>0.0.16.Final</version>
