@@ -4,6 +4,9 @@ import com.aayushatharva.brotli4j.Brotli4jLoader;
 import com.aayushatharva.brotli4j.decoder.DecoderJNI;
 import com.aayushatharva.brotli4j.decoder.DirectDecompress;
 import io.netty.handler.codec.compression.Brotli;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
@@ -49,6 +52,20 @@ public class HttpServerTest {
         HttpEntity responseEntity = httpResponse.getEntity();
         assertEquals("text/plain", responseEntity.getContentType());
         byte[] byteArray = EntityUtils.toByteArray(responseEntity);
+        DirectDecompress result = DirectDecompress.decompress(byteArray);
+        assertEquals(DecoderJNI.Status.DONE, result.getResultStatus());
+    }
+
+    @Test
+    public void brotliWithOkHttp() throws Exception {
+        OkHttpClient client = new OkHttpClient.Builder().build();
+        Request request = new Request.Builder()
+                .header("Accept-Encoding", "br")
+                .url(defaultUrl)
+                .build();
+        Response response = client.newCall(request).execute();
+        assertEquals("br", response.header("content-encoding"));
+        byte[] byteArray = response.body().bytes();
         DirectDecompress result = DirectDecompress.decompress(byteArray);
         assertEquals(DecoderJNI.Status.DONE, result.getResultStatus());
     }
