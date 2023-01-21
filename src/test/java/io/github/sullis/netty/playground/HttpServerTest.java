@@ -37,7 +37,7 @@ public class HttpServerTest {
         assertEquals("text/plain", responseEntity.getContentType());
         assertEquals(-1, responseEntity.getContentLength());
         String text = EntityUtils.toString(responseEntity);
-        assertEquals("foo", text);
+        assertEquals("Hello world", text);
         server.stop();
     }
 }
