@@ -65,6 +65,7 @@ public class HttpServerTest {
                 .build();
         Response response = client.newCall(request).execute();
         assertEquals("br", response.header("content-encoding"));
+        assertEquals("text/plain", response.header("content-type"));
         byte[] byteArray = response.body().bytes();
         DirectDecompress result = DirectDecompress.decompress(byteArray);
         assertEquals(DecoderJNI.Status.DONE, result.getResultStatus());
