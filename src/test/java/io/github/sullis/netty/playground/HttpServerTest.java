@@ -28,6 +28,7 @@ public class HttpServerTest {
 
     @BeforeEach
     public void beforeEach() throws Exception {
+        Brotli4jLoader.ensureAvailability();
         assertTrue(Brotli4jLoader.isAvailable());
         assertTrue(Brotli.isAvailable());
         server = new HttpServer();
