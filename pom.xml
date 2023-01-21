@@ -20,6 +20,7 @@
     <logback.version>1.2.11</logback.version>
     <slf4j.version>1.7.36</slf4j.version>
     <tcnative.version>2.0.56.Final</tcnative.version>
+    <brotli4j.version>1.9.0</brotli4j.version>
     <skip.tests>false</skip.tests>
   </properties>
 
@@ -69,6 +70,56 @@
           <artifactId>netty-incubator-transport-native-io_uring</artifactId>
           <version>0.0.16.Final</version>
           <classifier>linux-x86_64</classifier>
+      </dependency>
+      <!-- brotli4j is needed for content compression -->
+      <dependency>
+          <groupId>com.aayushatharva.brotli4j</groupId>
+          <artifactId>brotli4j</artifactId>
+          <version>${brotli4j.version}</version>
+          <scope>runtime</scope>
+          <optional>true</optional>
+      </dependency>
+      <dependency>
+          <groupId>com.aayushatharva.brotli4j</groupId>
+          <artifactId>native-linux-x86_64</artifactId>
+          <version>${brotli4j.version}</version>
+          <scope>runtime</scope>
+          <optional>true</optional>
+      </dependency>
+      <dependency>
+          <groupId>com.aayushatharva.brotli4j</groupId>
+          <artifactId>native-linux-aarch64</artifactId>
+          <version>${brotli4j.version}</version>
+          <scope>runtime</scope>
+          <optional>true</optional>
+      </dependency>
+      <dependency>
+          <groupId>com.aayushatharva.brotli4j</groupId>
+          <artifactId>native-linux-armv7</artifactId>
+          <version>${brotli4j.version}</version>
+          <scope>runtime</scope>
+          <optional>true</optional>
+      </dependency>
+      <dependency>
+          <groupId>com.aayushatharva.brotli4j</groupId>
+          <artifactId>native-osx-x86_64</artifactId>
+          <version>${brotli4j.version}</version>
+          <scope>runtime</scope>
+          <optional>true</optional>
+      </dependency>
+      <dependency>
+          <groupId>com.aayushatharva.brotli4j</groupId>
+          <artifactId>native-osx-aarch64</artifactId>
+          <version>${brotli4j.version}</version>
+          <scope>runtime</scope>
+          <optional>true</optional>
+      </dependency>
+      <dependency>
+          <groupId>com.aayushatharva.brotli4j</groupId>
+          <artifactId>native-windows-x86_64</artifactId>
+          <version>${brotli4j.version}</version>
+          <scope>runtime</scope>
+          <optional>true</optional>
       </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
