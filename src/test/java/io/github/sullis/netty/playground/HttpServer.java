@@ -44,10 +44,6 @@ public final class HttpServer {
         server.start();
     }
 
-    public void startAsync() {
-
-    }
-
     public void start() throws Exception {
         // Configure SSL.
         final SslContext sslCtx = ServerUtil.buildSslContext();
