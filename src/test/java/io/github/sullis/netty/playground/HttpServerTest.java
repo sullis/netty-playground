@@ -15,7 +15,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -52,7 +54,9 @@ public class HttpServerTest {
         assertEquals("br", httpResponse.getFirstHeader("content-encoding").getValue());
         HttpEntity responseEntity = httpResponse.getEntity();
         assertEquals("text/plain", responseEntity.getContentType());
-        BrotliInputStream brotliInputStream = new BrotliInputStream(responseEntity.getContent());
+        byte[] responseBodyBytes = EntityUtils.toByteArray(responseEntity);
+        System.out.println("responseBodyBytes: " + Arrays.toString(responseBodyBytes));
+        BrotliInputStream brotliInputStream = new BrotliInputStream(new ByteArrayInputStream(responseBodyBytes));
         String text = new String(brotliInputStream.readAllBytes(), StandardCharsets.UTF_8);
         assertEquals("Hello world", text);
         brotliInputStream.close();
