@@ -20,7 +20,7 @@ public class BrotliInputStreamTest {
     @Test
     public void brotliInputStreamHappyPath() throws Exception {
         final var charset = StandardCharsets.UTF_8;
-        final String inputText = "Hello Hello Hello";
+        final String inputText = TestConstants.CONTENT;
         byte[] compressed = Encoder.compress(inputText.getBytes(charset));
         final ByteArrayInputStream bais = new ByteArrayInputStream(compressed);
         BrotliInputStream brotliInputStream = new BrotliInputStream(bais);

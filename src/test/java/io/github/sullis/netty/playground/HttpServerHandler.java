@@ -37,7 +37,7 @@ import static io.netty.handler.codec.http.HttpHeaderValues.TEXT_PLAIN;
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 
 public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
-    private static final byte[] CONTENT = "Hello world".getBytes(StandardCharsets.UTF_8);
+    private static final byte[] RESPONSE_CONTENT = TestConstants.CONTENT.getBytes(StandardCharsets.UTF_8);
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
@@ -51,7 +51,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
 
             boolean keepAlive = HttpUtil.isKeepAlive(req);
             FullHttpResponse response = new DefaultFullHttpResponse(req.protocolVersion(), OK,
-                                                                    Unpooled.wrappedBuffer(CONTENT));
+                                                                    Unpooled.wrappedBuffer(RESPONSE_CONTENT));
             response.headers()
                     .set(CONTENT_TYPE, TEXT_PLAIN)
                     .setInt(CONTENT_LENGTH, response.content().readableBytes());

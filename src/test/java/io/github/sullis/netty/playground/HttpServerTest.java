@@ -2,8 +2,6 @@ package io.github.sullis.netty.playground;
 
 import com.aayushatharva.brotli4j.Brotli4jLoader;
 import com.aayushatharva.brotli4j.decoder.BrotliInputStream;
-import com.aayushatharva.brotli4j.decoder.DecoderJNI;
-import com.aayushatharva.brotli4j.decoder.DirectDecompress;
 import io.netty.handler.codec.compression.Brotli;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -58,7 +56,7 @@ public class HttpServerTest {
         System.out.println("responseBodyBytes: " + Arrays.toString(responseBodyBytes));
         BrotliInputStream brotliInputStream = new BrotliInputStream(new ByteArrayInputStream(responseBodyBytes));
         String text = new String(brotliInputStream.readAllBytes(), StandardCharsets.UTF_8);
-        assertEquals("Hello world", text);
+        assertEquals(TestConstants.CONTENT, text);
         brotliInputStream.close();
     }
 }
