@@ -25,8 +25,6 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslContext;
 
-import java.util.concurrent.ThreadPoolExecutor;
-
 /**
  * An HTTP server that sends back the content of the received HTTP request
  * in a pretty plaintext form.
@@ -46,7 +44,7 @@ public final class HttpServer {
 
     public void start() throws Exception {
         // Configure SSL.
-        final SslContext sslCtx = ServerUtil.buildSslContext();
+        final SslContext sslCtx = HttpServerUtil.buildSslContext();
 
         // Configure the server.
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);

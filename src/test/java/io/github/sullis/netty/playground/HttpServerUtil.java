@@ -22,14 +22,11 @@ import io.netty.handler.ssl.util.SelfSignedCertificate;
 import javax.net.ssl.SSLException;
 import java.security.cert.CertificateException;
 
-/**
- * Some useful methods for server side.
- */
-public final class ServerUtil {
+public final class HttpServerUtil {
 
     private static final boolean SSL = System.getProperty("ssl") != null;
 
-    private ServerUtil() {
+    private HttpServerUtil() {
     }
 
     public static SslContext buildSslContext() throws CertificateException, SSLException {
