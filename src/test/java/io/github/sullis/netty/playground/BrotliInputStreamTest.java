@@ -21,9 +21,9 @@ public class BrotliInputStreamTest {
 
     @Test
     public void brotliInputStreamHappyPath() throws Exception {
-        final var charset = StandardCharsets.UTF_8;
+        final var charset = TestConstants.CHARSET;
         final String inputText = TestConstants.CONTENT;
-        byte[] compressed = Encoder.compress(inputText.getBytes(charset), StandardCompressionOptions.brotli().parameters());
+        byte[] compressed = Encoder.compress(inputText.getBytes(), StandardCompressionOptions.brotli().parameters());
         System.out.println("inputText: " + inputText);
         System.out.println("compressed: " + Arrays.toString(compressed));
         final ByteArrayInputStream bais = new ByteArrayInputStream(compressed);

@@ -37,7 +37,7 @@ import static io.netty.handler.codec.http.HttpHeaderValues.TEXT_PLAIN;
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 
 public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
-    private static final byte[] RESPONSE_CONTENT = TestConstants.CONTENT.getBytes(StandardCharsets.UTF_8);
+    private static final byte[] RESPONSE_CONTENT = TestConstants.CONTENT.getBytes(TestConstants.CHARSET);
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {

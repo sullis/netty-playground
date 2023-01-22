@@ -55,7 +55,7 @@ public class HttpServerTest {
         byte[] responseBodyBytes = EntityUtils.toByteArray(responseEntity);
         System.out.println("responseBodyBytes: " + Arrays.toString(responseBodyBytes));
         BrotliInputStream brotliInputStream = new BrotliInputStream(new ByteArrayInputStream(responseBodyBytes));
-        String text = new String(brotliInputStream.readAllBytes(), StandardCharsets.UTF_8);
+        String text = new String(brotliInputStream.readAllBytes(), TestConstants.CHARSET);
         assertEquals(TestConstants.CONTENT, text);
         brotliInputStream.close();
     }
