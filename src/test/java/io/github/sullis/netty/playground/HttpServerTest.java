@@ -8,12 +8,14 @@ import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.io.EofSensorInputStream;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
@@ -52,7 +54,9 @@ public class HttpServerTest {
         assertEquals("br", httpResponse.getFirstHeader("content-encoding").getValue());
         HttpEntity responseEntity = httpResponse.getEntity();
         assertEquals("text/plain", responseEntity.getContentType());
-        BrotliInputStream brotliInputStream = new BrotliInputStream(responseEntity.getContent());
+        InputStream responseInput = responseEntity.getContent();
+        assertTrue(responseInput instanceof EofSensorInputStream);
+        BrotliInputStream brotliInputStream = new BrotliInputStream(responseInput);
         String text = new String(brotliInputStream.readAllBytes(), TestConstants.CHARSET);
         assertEquals(TestConstants.CONTENT, text);
         brotliInputStream.close();
