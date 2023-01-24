@@ -44,7 +44,7 @@ public class HttpServerTest {
     }
 
     @Test
-    public void brotliWithApacheHttpClient5() throws Exception {
+    public void brotliWithApacheHttpClient() throws Exception {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet(defaultUrl);
         httpGet.setHeader("Accept-Encoding", "br");
