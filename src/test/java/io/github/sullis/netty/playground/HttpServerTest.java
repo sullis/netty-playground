@@ -52,9 +52,7 @@ public class HttpServerTest {
         assertEquals("br", httpResponse.getFirstHeader("content-encoding").getValue());
         HttpEntity responseEntity = httpResponse.getEntity();
         assertEquals("text/plain", responseEntity.getContentType());
-        byte[] responseBodyBytes = EntityUtils.toByteArray(responseEntity);
-        System.out.println("responseBodyBytes: " + Arrays.toString(responseBodyBytes));
-        BrotliInputStream brotliInputStream = new BrotliInputStream(new ByteArrayInputStream(responseBodyBytes));
+        BrotliInputStream brotliInputStream = new BrotliInputStream(responseEntity.getContent());
         String text = new String(brotliInputStream.readAllBytes(), TestConstants.CHARSET);
         assertEquals(TestConstants.CONTENT, text);
         brotliInputStream.close();
