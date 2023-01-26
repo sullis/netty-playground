@@ -26,8 +26,10 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslContext;
 
+import static io.github.sullis.netty.playground.HttpServerUtil.NETTYLOG_NAME;
+
 public class HttpServerInitializer extends ChannelInitializer<SocketChannel> {
-    private static final LoggingHandler nettyLogger = new LoggingHandler("httpserver.nettylog", LogLevel.INFO);
+    private static final LoggingHandler nettyLogger = new LoggingHandler(NETTYLOG_NAME, LogLevel.INFO);
 
     private final SslContext sslCtx;
 

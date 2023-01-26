@@ -26,6 +26,8 @@ public final class HttpServerUtil {
 
     private static final boolean SSL = System.getProperty("ssl") != null;
 
+    public static final String NETTYLOG_NAME = "httpserver.nettylog";
+
     private HttpServerUtil() {
     }
 

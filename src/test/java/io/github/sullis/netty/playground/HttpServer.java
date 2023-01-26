@@ -25,6 +25,8 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslContext;
 
+import static io.github.sullis.netty.playground.HttpServerUtil.NETTYLOG_NAME;
+
 /**
  * An HTTP server that sends back the content of the received HTTP request
  * in a pretty plaintext form.
@@ -53,7 +55,7 @@ public final class HttpServer {
         b.option(ChannelOption.SO_BACKLOG, 1024);
         b.group(bossGroup, workerGroup)
          .channel(NioServerSocketChannel.class)
-         .handler(new LoggingHandler(LogLevel.INFO))
+         .handler(new LoggingHandler(NETTYLOG_NAME, LogLevel.INFO))
          .childHandler(new HttpServerInitializer(sslCtx));
 
         Channel ch = b.bind(PORT).sync().channel();
