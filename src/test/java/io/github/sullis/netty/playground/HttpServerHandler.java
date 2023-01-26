@@ -69,6 +69,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
                 response.headers().set(CONNECTION, CLOSE);
             }
 
+            LOGGER.info("channelRead0: about to invoke writeAndFlush");
             ChannelFuture f = ctx.writeAndFlush(response);
             LOGGER.info("channelRead0: writeAndFlush complete");
 
