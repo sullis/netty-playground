@@ -22,9 +22,12 @@ import io.netty.handler.codec.compression.CompressionOptions;
 import io.netty.handler.codec.http.HttpContentCompressor;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.HttpServerExpectContinueHandler;
+import io.netty.handler.logging.LogLevel;
+import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslContext;
 
 public class HttpServerInitializer extends ChannelInitializer<SocketChannel> {
+    private static final LoggingHandler nettyLogger = new LoggingHandler("httpserver.nettylog", LogLevel.INFO);
 
     private final SslContext sslCtx;
 
@@ -35,6 +38,7 @@ public class HttpServerInitializer extends ChannelInitializer<SocketChannel> {
     @Override
     public void initChannel(SocketChannel ch) {
         ChannelPipeline p = ch.pipeline();
+        p.addLast("logger", nettyLogger);
         if (sslCtx != null) {
             p.addLast(sslCtx.newHandler(ch.alloc()));
         }
