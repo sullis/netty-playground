@@ -26,8 +26,6 @@ import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpUtil;
 
-import java.nio.charset.StandardCharsets;
-
 import static io.netty.handler.codec.http.HttpHeaderNames.CONNECTION;
 import static io.netty.handler.codec.http.HttpHeaderNames.CONTENT_LENGTH;
 import static io.netty.handler.codec.http.HttpHeaderNames.CONTENT_TYPE;
@@ -65,7 +63,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
                 response.headers().set(CONNECTION, CLOSE);
             }
 
-            ChannelFuture f = ctx.write(response);
+            ChannelFuture f = ctx.writeAndFlush(response);
 
             if (!keepAlive) {
                 f.addListener(ChannelFutureListener.CLOSE);

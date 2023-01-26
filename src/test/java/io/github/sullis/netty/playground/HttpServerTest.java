@@ -1,22 +1,18 @@
 package io.github.sullis.netty.playground;
 
 import com.aayushatharva.brotli4j.Brotli4jLoader;
-import com.aayushatharva.brotli4j.decoder.BrotliInputStream;
+import com.aayushatharva.brotli4j.decoder.DirectDecompress;
 import io.netty.handler.codec.compression.Brotli;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.HttpEntity;
-import org.apache.hc.core5.http.io.EofSensorInputStream;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -54,11 +50,13 @@ public class HttpServerTest {
         assertEquals("br", httpResponse.getFirstHeader("content-encoding").getValue());
         HttpEntity responseEntity = httpResponse.getEntity();
         assertEquals("text/plain", responseEntity.getContentType());
-        InputStream responseInput = responseEntity.getContent();
-        assertTrue(responseInput instanceof EofSensorInputStream);
-        BrotliInputStream brotliInputStream = new BrotliInputStream(responseInput);
-        String text = new String(brotliInputStream.readAllBytes(), TestConstants.CHARSET);
+        byte[] compressedData = EntityUtils.toByteArray(responseEntity);
+        System.out.println("HTTP response compressedData: " + Arrays.toString(compressedData));
+        DirectDecompress directDecompress = DirectDecompress.decompress(compressedData);
+        System.out.println("DirectDecompress result status: " + directDecompress.getResultStatus());
+        byte[] decompressedData = directDecompress.getDecompressedData();
+        assertNotNull(decompressedData, "decompressedData");
+        String text = new String(decompressedData, TestConstants.CHARSET);
         assertEquals(TestConstants.CONTENT, text);
-        brotliInputStream.close();
     }
 }
