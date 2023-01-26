@@ -25,6 +25,8 @@ import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static io.netty.handler.codec.http.HttpHeaderNames.CONNECTION;
 import static io.netty.handler.codec.http.HttpHeaderNames.CONTENT_LENGTH;
@@ -36,14 +38,18 @@ import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 
 public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
     private static final byte[] RESPONSE_CONTENT = TestConstants.CONTENT.getBytes(TestConstants.CHARSET);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HttpServerHandler.class);
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
+        LOGGER.info("channelReadComplete: about to flush");
         ctx.flush();
+        LOGGER.info("channelReadComplete: flush complete");
     }
 
     @Override
     public void channelRead0(ChannelHandlerContext ctx, HttpObject msg) {
+        LOGGER.info("channelRead0 called");
         if (msg instanceof HttpRequest) {
             HttpRequest req = (HttpRequest) msg;
 
@@ -64,6 +70,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
             }
 
             ChannelFuture f = ctx.writeAndFlush(response);
+            LOGGER.info("channelRead0: writeAndFlush complete");
 
             if (!keepAlive) {
                 f.addListener(ChannelFutureListener.CLOSE);
@@ -73,6 +80,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        LOGGER.error("exceptionCaught", cause);
         cause.printStackTrace();
         ctx.close();
     }
