@@ -82,10 +82,12 @@ public class HttpServerTest {
         assertEquals(200, httpResponse.statusCode());
         assertEquals("br", httpResponse.headers().firstValue("content-encoding").get());
         assertEquals("text/plain", httpResponse.headers().firstValue("content-type").get());
-        InputStream responseInput = new ByteArrayInputStream(httpResponse.body());
-        BrotliInputStream brotliInputStream = new BrotliInputStream(responseInput);
-        String text = new String(brotliInputStream.readAllBytes(), TestConstants.CHARSET);
+        byte[] compressedData = httpResponse.body();
+        DirectDecompress directDecompress = DirectDecompress.decompress(compressedData);
+        System.out.println("DirectDecompress result status: " + directDecompress.getResultStatus());
+        byte[] decompressedData = directDecompress.getDecompressedData();
+        assertNotNull(decompressedData, "decompressedData");
+        String text = new String(decompressedData, TestConstants.CHARSET);
         assertEquals(TestConstants.CONTENT, text);
-        brotliInputStream.close();
     }
 }
