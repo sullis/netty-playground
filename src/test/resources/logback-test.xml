@@ -6,7 +6,7 @@
     </encoder>
   </appender>
 
-  <logger name="io.netty" level="WARN"/>
+  <logger name="io.netty" level="ALL"/>
   <logger name="io.github.sullis" level="WARN"/>
   <logger name="org.apache" level="ALL"/>
   <logger name="org.apache.hc.client5.http.wire" level="ALL"/>
