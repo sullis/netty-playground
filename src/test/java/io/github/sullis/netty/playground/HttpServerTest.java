@@ -56,6 +56,7 @@ public class HttpServerTest {
         HttpEntity responseEntity = httpResponse.getEntity();
         assertEquals("text/plain", responseEntity.getContentType());
         byte[] compressedData = EntityUtils.toByteArray(responseEntity);
+        System.out.println("HTTP response compressedData length: " + compressedData.length);
         System.out.println("HTTP response compressedData: " + Arrays.toString(compressedData));
         DirectDecompress directDecompress = DirectDecompress.decompress(compressedData);
         System.out.println("DirectDecompress result status: " + directDecompress.getResultStatus());
@@ -80,6 +81,7 @@ public class HttpServerTest {
         assertEquals("br", httpResponse.headers().firstValue("content-encoding").get());
         assertEquals("text/plain", httpResponse.headers().firstValue("content-type").get());
         byte[] compressedData = httpResponse.body();
+        System.out.println("HTTP response compressedData length: " + compressedData.length);
         System.out.println("HTTP response compressedData: " + Arrays.toString(compressedData));
         DirectDecompress directDecompress = DirectDecompress.decompress(compressedData);
         System.out.println("DirectDecompress result status: " + directDecompress.getResultStatus());
