@@ -13,6 +13,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -49,6 +51,7 @@ public class HttpServerTest {
         HttpEntity responseEntity = httpResponse.getEntity();
         assertEquals("text/plain", responseEntity.getContentType());
         byte[] compressedData = EntityUtils.toByteArray(responseEntity);
+        System.out.println("HTTP response compressedData: " + Arrays.toString(compressedData));
         DirectDecompress directDecompress = DirectDecompress.decompress(compressedData);
         System.out.println("DirectDecompress result status: " + directDecompress.getResultStatus());
         byte[] decompressedData = directDecompress.getDecompressedData();
