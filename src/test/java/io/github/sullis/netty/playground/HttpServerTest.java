@@ -1,6 +1,7 @@
 package io.github.sullis.netty.playground;
 
 import com.aayushatharva.brotli4j.Brotli4jLoader;
+import com.aayushatharva.brotli4j.decoder.BrotliInputStream;
 import com.aayushatharva.brotli4j.decoder.DirectDecompress;
 import io.netty.handler.codec.compression.Brotli;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
@@ -13,6 +14,13 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -51,6 +59,30 @@ public class HttpServerTest {
         HttpEntity responseEntity = httpResponse.getEntity();
         assertEquals("text/plain", responseEntity.getContentType());
         byte[] compressedData = EntityUtils.toByteArray(responseEntity);
+        System.out.println("HTTP response compressedData: " + Arrays.toString(compressedData));
+        DirectDecompress directDecompress = DirectDecompress.decompress(compressedData);
+        System.out.println("DirectDecompress result status: " + directDecompress.getResultStatus());
+        byte[] decompressedData = directDecompress.getDecompressedData();
+        assertNotNull(decompressedData, "decompressedData");
+        String text = new String(decompressedData, TestConstants.CHARSET);
+        assertEquals(TestConstants.CONTENT, text);
+    }
+
+    @Test
+    public void brotliWithJdkHttpClient() throws Exception {
+        HttpClient client = HttpClient.newBuilder()
+                .version(HttpClient.Version.HTTP_1_1)
+                .build();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(defaultUrl))
+                .setHeader("Accept-Encoding", "br")
+                .timeout(Duration.ofSeconds(1))
+                .build();
+        HttpResponse<byte[]> httpResponse = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
+        assertEquals(200, httpResponse.statusCode());
+        assertEquals("br", httpResponse.headers().firstValue("content-encoding").get());
+        assertEquals("text/plain", httpResponse.headers().firstValue("content-type").get());
+        byte[] compressedData = httpResponse.body();
         System.out.println("HTTP response compressedData: " + Arrays.toString(compressedData));
         DirectDecompress directDecompress = DirectDecompress.decompress(compressedData);
         System.out.println("DirectDecompress result status: " + directDecompress.getResultStatus());
