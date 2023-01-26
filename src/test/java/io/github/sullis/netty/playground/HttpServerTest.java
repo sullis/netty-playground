@@ -83,6 +83,7 @@ public class HttpServerTest {
         assertEquals("br", httpResponse.headers().firstValue("content-encoding").get());
         assertEquals("text/plain", httpResponse.headers().firstValue("content-type").get());
         byte[] compressedData = httpResponse.body();
+        System.out.println("HTTP response compressedData: " + Arrays.toString(compressedData));
         DirectDecompress directDecompress = DirectDecompress.decompress(compressedData);
         System.out.println("DirectDecompress result status: " + directDecompress.getResultStatus());
         byte[] decompressedData = directDecompress.getDecompressedData();
