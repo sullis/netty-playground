@@ -1,7 +1,6 @@
 package io.github.sullis.netty.playground;
 
 import com.aayushatharva.brotli4j.Brotli4jLoader;
-import com.aayushatharva.brotli4j.decoder.BrotliInputStream;
 import com.aayushatharva.brotli4j.decoder.DirectDecompress;
 import io.netty.handler.codec.compression.Brotli;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
@@ -14,8 +13,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
