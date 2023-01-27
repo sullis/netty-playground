@@ -49,7 +49,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
 
     @Override
     public void channelRead0(ChannelHandlerContext ctx, HttpObject msg) {
-        LOGGER.info("channelRead0 called");
+        LOGGER.info("channelRead0 called: " + msg.getClass().getName());
         if (msg instanceof HttpRequest) {
             HttpRequest req = (HttpRequest) msg;
 
