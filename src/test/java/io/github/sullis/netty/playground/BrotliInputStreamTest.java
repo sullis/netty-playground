@@ -25,6 +25,7 @@ public class BrotliInputStreamTest {
         final String inputText = TestConstants.CONTENT;
         byte[] compressed = Encoder.compress(inputText.getBytes(), StandardCompressionOptions.brotli().parameters());
         System.out.println("inputText: " + inputText);
+        System.out.println("compressed length: " + compressed.length);
         System.out.println("compressed: " + Arrays.toString(compressed));
         final ByteArrayInputStream bais = new ByteArrayInputStream(compressed);
         BrotliInputStream brotliInputStream = new BrotliInputStream(bais);
