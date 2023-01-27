@@ -41,10 +41,11 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpServerHandler.class);
 
     @Override
-    public void channelReadComplete(ChannelHandlerContext ctx) {
+    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
         LOGGER.info("channelReadComplete: about to flush");
         ctx.flush();
         LOGGER.info("channelReadComplete: flush complete");
+        super.channelReadComplete(ctx);
     }
 
     @Override
