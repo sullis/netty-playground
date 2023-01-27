@@ -54,6 +54,9 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
             HttpRequest req = (HttpRequest) msg;
 
             boolean keepAlive = HttpUtil.isKeepAlive(req);
+
+            LOGGER.info("channelRead0: keepAlive=" + keepAlive);
+
             FullHttpResponse response = new DefaultFullHttpResponse(req.protocolVersion(), OK,
                                                                     Unpooled.wrappedBuffer(RESPONSE_CONTENT));
             response.headers()
@@ -69,9 +72,9 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
                 response.headers().set(CONNECTION, CLOSE);
             }
 
-            LOGGER.info("channelRead0: about to invoke writeAndFlush");
-            ChannelFuture f = ctx.writeAndFlush(response);
-            LOGGER.info("channelRead0: writeAndFlush complete");
+            LOGGER.info("channelRead0: about to invoke write");
+            ChannelFuture f = ctx.write(response);
+            LOGGER.info("channelRead0: write complete");
 
             if (!keepAlive) {
                 f.addListener(ChannelFutureListener.CLOSE);
