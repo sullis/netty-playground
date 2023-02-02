@@ -21,6 +21,7 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslContext;
@@ -34,14 +35,18 @@ import static io.github.sullis.netty.playground.HttpServerUtil.NETTYLOG_NAME;
 public final class HttpServer {
 
     static final boolean SSL = System.getProperty("ssl") != null;
-    static final int PORT = Integer.parseInt(System.getProperty("port", SSL? "8443" : "8080"));
 
     private EventLoopGroup bossGroup;
     private EventLoopGroup workerGroup;
+    private int port = -1;
 
     public static void main(String[] args) throws Exception {
         HttpServer server = new HttpServer();
         server.start();
+    }
+
+    public int getPort() {
+        return this.port;
     }
 
     public void start() throws Exception {
@@ -58,10 +63,12 @@ public final class HttpServer {
          .handler(new LoggingHandler(NETTYLOG_NAME, LogLevel.INFO))
          .childHandler(new HttpServerInitializer(sslCtx));
 
-        Channel ch = b.bind(PORT).sync().channel();
+        Channel ch = b.bind(0).sync().channel();
+
+        port = ((NioServerSocketChannel) ch).localAddress().getPort();
 
         System.err.println("Server: " +
-                (SSL? "https" : "http") + "://127.0.0.1:" + PORT + '/');
+                (SSL? "https" : "http") + "://127.0.0.1:" + this.port + '/');
 
         // ch.closeFuture().sync();
     }

@@ -36,7 +36,7 @@ public class HttpServerTest {
         assertTrue(Brotli.isAvailable());
         server = new HttpServer();
         server.start();
-        defaultUrl = "http://localhost:8080/";
+        defaultUrl = "http://localhost:" + server.getPort() + "/";
     }
 
     @AfterEach
