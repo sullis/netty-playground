@@ -67,9 +67,18 @@ public class HttpServerTest {
     }
 
     @Test
-    public void brotliWithJdkHttpClient() throws Exception {
+    public void brotliWithJdkHttpClient_http1() throws Exception {
+        verifyBrotliWithJdkHttpClient(HttpClient.Version.HTTP_1_1);
+    }
+
+    @Test
+    public void brotliWithJdkHttpClient_http2() throws Exception {
+        verifyBrotliWithJdkHttpClient(HttpClient.Version.HTTP_2);
+    }
+
+    private void verifyBrotliWithJdkHttpClient(final HttpClient.Version httpVersion) throws Exception {
         HttpClient client = HttpClient.newBuilder()
-                .version(HttpClient.Version.HTTP_1_1)
+                .version(httpVersion)
                 .build();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(defaultUrl))
