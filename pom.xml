@@ -19,7 +19,7 @@
     <junit.version>5.9.2</junit.version>
     <logback.version>1.2.11</logback.version>
     <slf4j.version>1.7.36</slf4j.version>
-    <tcnative.version>2.0.56.Final</tcnative.version>
+    <tcnative.version>2.0.57.Final</tcnative.version>
     <brotli4j.version>1.9.0</brotli4j.version>
     <skip.tests>false</skip.tests>
   </properties>
@@ -37,7 +37,7 @@
       <dependency>
         <groupId>io.netty</groupId>
         <artifactId>netty-bom</artifactId>
-        <version>4.1.88.Final-SNAPSHOT</version>
+        <version>4.1.88.Final</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
