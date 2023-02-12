@@ -63,32 +63,42 @@
       </dependency>
       <dependency>
           <groupId>io.netty</groupId>
+          <artifactId>netty-tcnative-classes</artifactId>
+          <version>${tcnative.version}</version>
+      </dependency>
+      <dependency>
+          <groupId>io.netty</groupId>
           <artifactId>netty-tcnative-boringssl-static</artifactId>
           <version>${tcnative.version}</version>
+          <scope>runtime</scope>
       </dependency>
       <dependency>
           <groupId>io.netty</groupId>
           <artifactId>netty-tcnative-boringssl-static</artifactId>
           <version>${tcnative.version}</version>
           <classifier>linux-x86_64</classifier>
+          <scope>runtime</scope>
       </dependency>
       <dependency>
           <groupId>io.netty</groupId>
           <artifactId>netty-tcnative-boringssl-static</artifactId>
           <version>${tcnative.version}</version>
           <classifier>linux-aarch_64</classifier>
+          <scope>runtime</scope>
       </dependency>
       <dependency>
           <groupId>io.netty</groupId>
           <artifactId>netty-tcnative-boringssl-static</artifactId>
           <version>${tcnative.version}</version>
           <classifier>osx-x86_64</classifier>
+          <scope>runtime</scope>
       </dependency>
       <dependency>
           <groupId>io.netty</groupId>
           <artifactId>netty-tcnative-boringssl-static</artifactId>
           <version>${tcnative.version}</version>
           <classifier>osx-aarch_64</classifier>
+          <scope>runtime</scope>
       </dependency>
       <dependency>
           <groupId>io.netty.incubator</groupId>
