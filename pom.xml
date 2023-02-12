@@ -24,14 +24,6 @@
     <skip.tests>false</skip.tests>
   </properties>
 
-  <repositories>
-    <repository>
-      <id>netty-snapshots</id>
-      <name>netty-snapshots</name>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </repository>
-  </repositories>
-
   <dependencyManagement>
     <dependencies>
       <dependency>
