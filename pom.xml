@@ -103,7 +103,7 @@
       <dependency>
           <groupId>io.netty.incubator</groupId>
           <artifactId>netty-incubator-transport-native-io_uring</artifactId>
-          <version>0.0.17.Final</version>
+          <version>0.0.19.Final</version>
           <classifier>linux-x86_64</classifier>
       </dependency>
       <!-- brotli4j is needed for content compression -->
