@@ -26,6 +26,8 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslContext;
 
+import java.net.InetSocketAddress;
+
 import static io.github.sullis.netty.playground.HttpServerUtil.NETTYLOG_NAME;
 
 /**
@@ -65,7 +67,8 @@ public final class HttpServer {
 
         Channel ch = b.bind(0).sync().channel();
 
-        port = ((NioServerSocketChannel) ch).localAddress().getPort();
+        InetSocketAddress localAddress = ((NioServerSocketChannel) ch).localAddress();
+        this.port = localAddress.getPort();
 
         System.err.println("Server: " +
                 (SSL? "https" : "http") + "://127.0.0.1:" + this.port + '/');
