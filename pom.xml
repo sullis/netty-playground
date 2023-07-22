@@ -50,6 +50,9 @@
                             </execution>
                         </executions>
                         <configuration>
+                            <metadataRepository>
+                                <enabled>true</enabled>
+                            </metadataRepository>
                             <fallback>false</fallback>
                             <buildArgs>
                                 <arg>-H:DashboardDump=fortune -H:+DashboardAll</arg>
