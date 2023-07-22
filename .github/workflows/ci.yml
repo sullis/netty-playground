@@ -28,3 +28,18 @@ jobs:
       run: ulimit -l
     - name: Build
       run: sudo -E env "PATH=$PATH" bash -c "ulimit -l 65536 && ulimit -a && mvn --no-transfer-progress -B clean test"
+  graalvm:
+    needs: build
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: actions/checkout@v3
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '17'
+          distribution: 'graalvm'
+      - name: print Graalvm info
+        run: |
+          echo "GRAALVM_HOME: $GRAALVM_HOME"
+          echo "JAVA_HOME: $JAVA_HOME"
+          java --version
+          native-image --version
