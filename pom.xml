@@ -59,9 +59,6 @@
                             </buildArgs>
                             <agent>
                                 <enabled>true</enabled>
-                                <options>
-                                    <option>experimental-class-loader-support</option>
-                                </options>
                             </agent>
                         </configuration>
                     </plugin>
