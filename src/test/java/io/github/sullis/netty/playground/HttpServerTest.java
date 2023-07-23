@@ -36,6 +36,7 @@ public class HttpServerTest {
         leakListener = new NettyLeakListener();
         ByteBufUtil.setLeakListener(leakListener);
         System.out.println("java.version: " + System.getProperty("java.version"));
+        System.out.println("java.vendor: " + System.getProperty("java.vendor"));
         System.out.println("os.name: " + System.getProperty("os.name"));
         System.out.println("os.arch: " + System.getProperty("os.arch"));
     }
