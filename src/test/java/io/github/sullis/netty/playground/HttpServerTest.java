@@ -35,10 +35,9 @@ public class HttpServerTest {
     static public void beforeAll() throws Exception {
         leakListener = new NettyLeakListener();
         ByteBufUtil.setLeakListener(leakListener);
-        String osName = System.getProperty("os.name");
-        String archName = System.getProperty("os.arch");
-        System.out.println("os.name: " + osName);
-        System.out.println("os.arch: " + archName);
+        System.out.println("java.version: " + System.getProperty("java.version"));
+        System.out.println("os.name: " + System.getProperty("os.name"));
+        System.out.println("os.arch: " + System.getProperty("os.arch"));
     }
 
     @BeforeEach
