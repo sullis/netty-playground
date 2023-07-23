@@ -10,6 +10,7 @@ import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.HttpEntity;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -27,6 +28,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class HttpServerTest {
     private HttpServer server;
     private String defaultUrl;
+
+    @BeforeAll
+    static public void beforeAll() throws Exception {
+        String osName = System.getProperty("os.name");
+        String archName = System.getProperty("os.arch");
+        System.out.println("os.name: " + osName);
+        System.out.println("os.arch: " + archName);
+    }
 
     @BeforeEach
     public void beforeEach() throws Exception {
