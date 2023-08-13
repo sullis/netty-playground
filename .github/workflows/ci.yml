@@ -43,4 +43,4 @@ jobs:
           echo "JAVA_HOME: $JAVA_HOME"
           java --version
           native-image --version
-      - run: mvn -Pnative clean
+      - run: mvn --no-transfer-progress -Pnative clean
