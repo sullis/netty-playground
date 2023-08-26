@@ -51,8 +51,8 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
     @Override
     public void channelRead0(ChannelHandlerContext ctx, HttpObject msg) {
         if (msg instanceof HttpRequest) {
-            LOGGER.info("channelRead0 HttpRequest: " + msg.getClass().getName());
             HttpRequest req = (HttpRequest) msg;
+            LOGGER.info("channelRead0 HttpRequest: {} {}", req.method().name(), msg.getClass().getName());
 
             boolean keepAlive = HttpUtil.isKeepAlive(req);
 
