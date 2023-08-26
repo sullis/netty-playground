@@ -6,15 +6,15 @@
     </encoder>
   </appender>
 
-  <logger name="io.netty" level="ALL"/>
+  <logger name="io.netty" level="ERROR"/>
   <logger name="httpserver" level="ALL"/>
   <logger name="io.github.sullis" level="ALL"/>
-  <logger name="org.apache" level="ALL"/>
+  <logger name="org.apache" level="ERROR"/>
   <logger name="org.apache.hc.client5.http.wire" level="ALL"/>
-  <logger name="org.eclipse" level="WARN"/>
-  <logger name="com.ning" level="WARN"/>
-  <logger name="org.asynchttpclient" level="WARN"/>
-  <logger name="org.testcontainers" level="WARN"/>
+  <logger name="org.eclipse" level="ERROR"/>
+  <logger name="com.ning" level="ERROR"/>
+  <logger name="org.asynchttpclient" level="ERROR"/>
+  <logger name="org.testcontainers" level="ERROR"/>
 
   <root level="ERROR">
     <appender-ref ref="STDOUT" />
