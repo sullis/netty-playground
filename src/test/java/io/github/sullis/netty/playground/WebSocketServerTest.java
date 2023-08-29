@@ -105,15 +105,11 @@ public class WebSocketServerTest {
                     }
                });
         WebSocket webSocket = webSocketFuture.join();
-        awaitUntilTrue(onOpenCalled);
+        await().untilTrue(onOpenCalled);
         assertThat(webSocket.isInputClosed()).isFalse();
         assertThat(webSocket.isOutputClosed()).isFalse();
-        awaitUntilTrue(onTextCalled);
+        await().untilTrue(onTextCalled);
         assertThat(onErrorCalled).isFalse();
     }
 
-    static private void awaitUntilTrue(final AtomicBoolean b) {
-        await().atMost(Duration.ofMillis(1000))
-                .until(() -> b.get());
-    }
 }
