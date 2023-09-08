@@ -1,10 +1,9 @@
 package io.github.sullis.netty.playground;
 
-import io.netty.buffer.ByteBufUtil;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -19,8 +18,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
+@ExtendWith(NettyLeakExtension.class)
 public class WebSocketServerTest {
-    private static NettyLeakListener leakListener;
     private WebSocketServer server;
     private String defaultUrl;
     private ExecutorService executor;
@@ -30,19 +29,12 @@ public class WebSocketServerTest {
         System.setProperty("jdk.internal.httpclient.websocket.debug", "true");
     } */
 
-    @BeforeAll
-    static public void beforeAll() throws Exception {
-        leakListener = new NettyLeakListener();
-        ByteBufUtil.setLeakListener(leakListener);
-    }
-
     @BeforeEach
     public void beforeEach() throws Exception {
         executor = Executors.newCachedThreadPool();
         server = new WebSocketServer(TestConstants.WEBSOCKET_PATH);
         server.start();
         defaultUrl = "ws://127.0.0.1:" + server.getPort() + TestConstants.WEBSOCKET_PATH;
-        leakListener.assertZeroLeaks();
     }
 
     @AfterEach
@@ -53,7 +45,6 @@ public class WebSocketServerTest {
         if (executor != null) {
             executor.shutdown();
         }
-        leakListener.assertZeroLeaks();
     }
 
     @Test

@@ -2,7 +2,6 @@ package io.github.sullis.netty.playground;
 
 import com.aayushatharva.brotli4j.Brotli4jLoader;
 import com.aayushatharva.brotli4j.decoder.DirectDecompress;
-import io.netty.buffer.ByteBufUtil;
 import io.netty.handler.codec.compression.Brotli;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -14,6 +13,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -26,15 +26,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@ExtendWith(NettyLeakExtension.class)
 public class HttpServerTest {
-    private static NettyLeakListener leakListener;
     private HttpServer server;
     private String defaultUrl;
 
     @BeforeAll
     static public void beforeAll() throws Exception {
-        leakListener = new NettyLeakListener();
-        ByteBufUtil.setLeakListener(leakListener);
         String osName = System.getProperty("os.name");
         String archName = System.getProperty("os.arch");
         System.out.println("os.name: " + osName);
@@ -49,7 +47,6 @@ public class HttpServerTest {
         server = new HttpServer();
         server.start();
         defaultUrl = "http://localhost:" + server.getPort() + "/";
-        leakListener.assertZeroLeaks();
     }
 
     @AfterEach
@@ -57,7 +54,6 @@ public class HttpServerTest {
         if (server != null) {
             server.stop();
         }
-        leakListener.assertZeroLeaks();
     }
 
     @Test
