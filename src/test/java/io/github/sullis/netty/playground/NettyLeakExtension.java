@@ -13,6 +13,7 @@ public class NettyLeakExtension
     private static final NettyLeakListener leakListener;
 
     static {
+        System.setProperty("io.netty.leakDetection.level", "paranoid");
         leakListener = new NettyLeakListener();
         ByteBufUtil.setLeakListener(leakListener);
     }
