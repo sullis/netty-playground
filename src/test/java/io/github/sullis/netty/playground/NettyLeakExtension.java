@@ -10,11 +10,16 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 public class NettyLeakExtension
     implements BeforeAllCallback, BeforeEachCallback, AfterEachCallback, AfterAllCallback {
 
-    private final NettyLeakListener leakListener = new NettyLeakListener();
+    private static final NettyLeakListener leakListener;
+
+    static {
+        leakListener = new NettyLeakListener();
+        ByteBufUtil.setLeakListener(leakListener);
+    }
 
     @Override
     public void beforeAll(ExtensionContext extensionContext) throws Exception {
-        ByteBufUtil.setLeakListener(leakListener);
+        leakListener.assertZeroLeaks();
     }
 
     @Override
