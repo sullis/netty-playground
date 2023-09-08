@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@ExtendWith(NettyLeakExtension.class)
+@ExtendWith(NettyParanoidLeakExtension.class)
 public class HttpServerTest {
     private HttpServer server;
     private String defaultUrl;
