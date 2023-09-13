@@ -18,6 +18,7 @@ package io.github.sullis.netty.playground;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.compression.CompressionOptions;
 import io.netty.handler.codec.http.HttpContentCompressor;
 import io.netty.handler.codec.http.HttpServerCodec;
@@ -25,10 +26,13 @@ import io.netty.handler.codec.http.HttpServerExpectContinueHandler;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static io.github.sullis.netty.playground.HttpServerUtil.NETTYLOG_NAME;
 
 public class HttpServerInitializer extends ChannelInitializer<SocketChannel> {
+    private static final Logger LOG = LoggerFactory.getLogger(HttpServerInitializer.class);
     private static final LoggingHandler nettyLogger = new LoggingHandler(NETTYLOG_NAME, LogLevel.INFO);
 
     private final SslContext sslCtx;
@@ -39,6 +43,11 @@ public class HttpServerInitializer extends ChannelInitializer<SocketChannel> {
 
     @Override
     public void initChannel(SocketChannel ch) {
+        LOG.info("initChannel: " + ch.getClass().getName());
+        if (ch instanceof NioSocketChannel) {
+            NioSocketChannel nioSocketChannel = (NioSocketChannel) ch;
+            LOG.info("SocketChannel: {} isKeepAlive {}", nioSocketChannel.getClass().getSimpleName(), nioSocketChannel.config().isKeepAlive());
+        }
         ChannelPipeline p = ch.pipeline();
         p.addLast("logger", nettyLogger);
         if (sslCtx != null) {
