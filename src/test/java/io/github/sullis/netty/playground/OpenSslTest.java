@@ -1,9 +1,14 @@
 package io.github.sullis.netty.playground;
 
 import io.netty.handler.ssl.OpenSsl;
+import io.netty.handler.ssl.OpenSslClientContext;
+import io.netty.handler.ssl.SslContext;
+import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.SslProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import javax.net.ssl.SSLSessionContext;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,9 +21,15 @@ class OpenSslTest {
     }
 
     @Test
-    void testBoringSsl() {
+    void testBoringSsl() throws Exception {
         assertThat(OpenSsl.versionString()).isEqualTo("BoringSSL");
         assertTrue(SslProvider.isAlpnSupported(SslProvider.OPENSSL));
         assertTrue(SslProvider.isTlsv13Supported(SslProvider.OPENSSL));
+
+        SslContext clientCtx = SslContextBuilder.forClient().build();
+        assertThat(clientCtx).isInstanceOf(OpenSslClientContext.class);
+        SSLSessionContext sessionCtx = clientCtx.sessionContext();
+        assertThat(sessionCtx.getSessionCacheSize()).isEqualTo(20480);
+        assertThat(sessionCtx.getSessionTimeout()).isEqualTo(300);
     }
 }
