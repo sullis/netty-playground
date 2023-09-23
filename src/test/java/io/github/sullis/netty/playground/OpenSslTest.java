@@ -2,9 +2,11 @@ package io.github.sullis.netty.playground;
 
 import io.netty.handler.ssl.OpenSsl;
 import io.netty.handler.ssl.OpenSslClientContext;
+import io.netty.handler.ssl.OpenSslServerContext;
 import io.netty.handler.ssl.OpenSslSessionContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.SslProvider;
+import io.netty.handler.ssl.util.SelfSignedCertificate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -23,9 +25,22 @@ class OpenSslTest {
         assertThat(OpenSsl.versionString()).isEqualTo("BoringSSL");
         assertTrue(SslProvider.isAlpnSupported(SslProvider.OPENSSL));
         assertTrue(SslProvider.isTlsv13Supported(SslProvider.OPENSSL));
+    }
 
+    @Test
+    void testClientContext() throws Exception {
         OpenSslClientContext clientCtx = (OpenSslClientContext) SslContextBuilder.forClient().build();
         OpenSslSessionContext sessionCtx = clientCtx.sessionContext();
+        assertThat(sessionCtx.getSessionCacheSize()).isEqualTo(20480);
+        assertThat(sessionCtx.getSessionTimeout()).isEqualTo(300);
+        assertThat(sessionCtx.isSessionCacheEnabled()).isEqualTo(true);
+    }
+
+    @Test
+    void testServerContext() throws Exception {
+        SelfSignedCertificate cert = new SelfSignedCertificate();
+        OpenSslServerContext serverCtx = (OpenSslServerContext) SslContextBuilder.forServer(cert.key(), cert.cert()).build();
+        OpenSslSessionContext sessionCtx = serverCtx.sessionContext();
         assertThat(sessionCtx.getSessionCacheSize()).isEqualTo(20480);
         assertThat(sessionCtx.getSessionTimeout()).isEqualTo(300);
         assertThat(sessionCtx.isSessionCacheEnabled()).isEqualTo(true);
