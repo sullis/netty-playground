@@ -29,7 +29,7 @@ import io.netty.handler.ssl.SslContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static io.github.sullis.netty.playground.HttpServerUtil.NETTYLOG_NAME;
+import static io.github.sullis.netty.playground.HttpUtil.NETTYLOG_NAME;
 
 public class HttpServerInitializer extends ChannelInitializer<SocketChannel> {
     private static final Logger LOG = LoggerFactory.getLogger(HttpServerInitializer.class);

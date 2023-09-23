@@ -11,8 +11,6 @@ import java.net.http.WebSocket;
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,7 +20,6 @@ import static org.awaitility.Awaitility.await;
 public class WebSocketServerTest {
     private WebSocketServer server;
     private String defaultUrl;
-    private ExecutorService executor;
 
     /*
     static {
@@ -31,19 +28,15 @@ public class WebSocketServerTest {
 
     @BeforeEach
     public void beforeEach() throws Exception {
-        executor = Executors.newCachedThreadPool();
         server = new WebSocketServer(TestConstants.WEBSOCKET_PATH);
         server.start();
-        defaultUrl = "ws://127.0.0.1:" + server.getPort() + TestConstants.WEBSOCKET_PATH;
+        defaultUrl = server.getDefaultUrl();
     }
 
     @AfterEach
     public void afterEach() {
         if (server != null) {
             server.stop();
-        }
-        if (executor != null) {
-            executor.shutdown();
         }
     }
 
@@ -62,10 +55,7 @@ public class WebSocketServerTest {
         AtomicBoolean onErrorCalled = new AtomicBoolean(false);
         AtomicBoolean onTextCalled = new AtomicBoolean(false);
 
-        HttpClient client = HttpClient.newBuilder()
-                .version(httpVersion)
-                .executor(executor)
-                .build();
+        HttpClient client = HttpUtil.createJdkHttpClient(httpVersion);
         CompletableFuture<WebSocket> webSocketFuture = client.newWebSocketBuilder()
                 .connectTimeout(Duration.ofMillis(5000))
                 .buildAsync(URI.create(defaultUrl), new WebSocket.Listener() {

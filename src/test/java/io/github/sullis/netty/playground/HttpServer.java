@@ -21,22 +21,19 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslContext;
 
 import java.net.InetSocketAddress;
 
-import static io.github.sullis.netty.playground.HttpServerUtil.NETTYLOG_NAME;
+import static io.github.sullis.netty.playground.HttpUtil.NETTYLOG_NAME;
 
 /**
  * An HTTP server that sends back the content of the received HTTP request
  * in a pretty plaintext form.
  */
 public final class HttpServer {
-
-    static final boolean SSL = System.getProperty("ssl") != null;
 
     private EventLoopGroup bossGroup;
     private EventLoopGroup workerGroup;
@@ -52,8 +49,7 @@ public final class HttpServer {
     }
 
     public void start() throws Exception {
-        // Configure SSL.
-        final SslContext sslCtx = HttpServerUtil.buildSslContext();
+        final SslContext sslCtx = HttpUtil.buildNettySslContext();
 
         // Configure the server.
         EventLoopGroup bossGroup = new NioEventLoopGroup();
@@ -70,10 +66,13 @@ public final class HttpServer {
         InetSocketAddress localAddress = ((NioServerSocketChannel) ch).localAddress();
         this.port = localAddress.getPort();
 
-        System.err.println("Server: " +
-                (SSL? "https" : "http") + "://127.0.0.1:" + this.port + '/');
+        System.out.println("Server: " + this.getDefaultUrl());
 
         // ch.closeFuture().sync();
+    }
+
+    public String getDefaultUrl() {
+        return "https://127.0.0.1:" + this.getPort() + '/';
     }
 
     public void stop() {

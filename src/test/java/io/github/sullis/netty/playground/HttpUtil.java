@@ -19,25 +19,33 @@ import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.SelfSignedCertificate;
 
+import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLException;
+import javax.net.ssl.TrustManager;
+import java.net.http.HttpClient;
+import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 
-public final class HttpServerUtil {
-
-    private static final boolean SSL = System.getProperty("ssl") != null;
+public final class HttpUtil {
 
     public static final String NETTYLOG_NAME = "httpserver.nettylog";
 
-    private HttpServerUtil() {
+    private HttpUtil() {
     }
 
-    public static SslContext buildSslContext() throws CertificateException, SSLException {
-        if (!SSL) {
-            return null;
-        }
+    public static SslContext buildNettySslContext() throws CertificateException, SSLException {
         SelfSignedCertificate ssc = new SelfSignedCertificate();
         return SslContextBuilder
                 .forServer(ssc.certificate(), ssc.privateKey())
+                .build();
+    }
+
+    public static HttpClient createJdkHttpClient(HttpClient.Version httpVersion) throws Exception {
+        SSLContext sslContext = SSLContext.getInstance("TLS");
+        sslContext.init(null, new TrustManager[]{new TrustAllTrustManager()}, new SecureRandom());
+        return HttpClient.newBuilder()
+                .version(httpVersion)
+                .sslContext(sslContext)
                 .build();
     }
 }

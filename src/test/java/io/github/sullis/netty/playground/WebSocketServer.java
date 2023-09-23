@@ -27,7 +27,7 @@ import io.netty.handler.ssl.SslContext;
 
 import java.net.InetSocketAddress;
 
-import static io.github.sullis.netty.playground.HttpServerUtil.NETTYLOG_NAME;
+import static io.github.sullis.netty.playground.HttpUtil.NETTYLOG_NAME;
 
 public final class WebSocketServer {
 
@@ -48,8 +48,12 @@ public final class WebSocketServer {
         return this.port;
     }
 
+    public String getDefaultUrl() {
+        return "wss://127.0.0.1:" + this.getPort() + this.webSocketPath;
+    }
+
     public void start() throws Exception {
-        final SslContext sslCtx = HttpServerUtil.buildSslContext();
+        final SslContext sslCtx = HttpUtil.buildNettySslContext();
 
         bossGroup = new NioEventLoopGroup();
         workerGroup = new NioEventLoopGroup();
@@ -65,8 +69,7 @@ public final class WebSocketServer {
         InetSocketAddress localAddress = ((NioServerSocketChannel) ch).localAddress();
         this.port = localAddress.getPort();
 
-        System.out.println(this.getClass().getSimpleName() + ": " +
-                ((sslCtx != null) ? "wss" : "ws") + "://127.0.0.1:" + this.port + '/');
+        System.out.println(this.getClass().getSimpleName() + ": " + getDefaultUrl());
 
         // ch.closeFuture().sync();
     }

@@ -7,14 +7,22 @@ import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
+import org.apache.hc.client5.http.io.HttpClientConnectionManager;
+import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
+import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
+import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactoryBuilder;
+import org.apache.hc.client5.http.ssl.TrustAllStrategy;
 import org.apache.hc.core5.http.HttpEntity;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.core5.ssl.SSLContextBuilder;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import javax.net.ssl.SSLContext;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -46,7 +54,7 @@ public class HttpServerTest {
         assertTrue(Brotli.isAvailable());
         server = new HttpServer();
         server.start();
-        defaultUrl = "http://localhost:" + server.getPort() + "/";
+        defaultUrl = server.getDefaultUrl();
     }
 
     @AfterEach
@@ -58,7 +66,10 @@ public class HttpServerTest {
 
     @Test
     public void brotliWithApacheHttpClient() throws Exception {
-        CloseableHttpClient httpClient = HttpClients.createDefault();
+        SSLContext sslContext = SSLContextBuilder.create().loadTrustMaterial(TrustAllStrategy.INSTANCE).build();
+        SSLConnectionSocketFactory socketFactory = SSLConnectionSocketFactoryBuilder.create().setHostnameVerifier(NoopHostnameVerifier.INSTANCE).setSslContext(sslContext).build();
+        HttpClientConnectionManager connManager = PoolingHttpClientConnectionManagerBuilder.create().setSSLSocketFactory(socketFactory).build();
+        CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(connManager).build();
         HttpGet httpGet = new HttpGet(defaultUrl);
         httpGet.setHeader("Accept-Encoding", "br");
         CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
@@ -87,9 +98,7 @@ public class HttpServerTest {
     }
 
     private void verifyBrotliWithJdkHttpClient(final HttpClient.Version httpVersion) throws Exception {
-        HttpClient client = HttpClient.newBuilder()
-                .version(httpVersion)
-                .build();
+        HttpClient client = HttpUtil.createJdkHttpClient(httpVersion);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(defaultUrl))
                 .setHeader("Accept-Encoding", "br")
@@ -110,3 +119,4 @@ public class HttpServerTest {
         assertEquals(TestConstants.CONTENT, text);
     }
 }
+
