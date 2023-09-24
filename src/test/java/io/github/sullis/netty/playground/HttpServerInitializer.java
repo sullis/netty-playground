@@ -56,6 +56,6 @@ public class HttpServerInitializer extends ChannelInitializer<SocketChannel> {
         p.addLast(new HttpServerCodec());
         p.addLast(new HttpContentCompressor((CompressionOptions[]) null));
         p.addLast(new HttpServerExpectContinueHandler());
-        p.addLast(new HttpServerHandler());
+        p.addLast(new HttpRequestHandler());
     }
 }
