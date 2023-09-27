@@ -303,6 +303,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>3.1.2</version>
         <configuration>
+          <argLine>-Xcheck:jni</argLine>
           <forkCount>8</forkCount>
           <reuseForks>true</reuseForks>
         </configuration>
