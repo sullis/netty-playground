@@ -15,9 +15,9 @@ import java.util.function.Supplier;
 
 public enum NettyTransport {
 
-    NIO(() -> true, () -> new NioEventLoopGroup(), NioServerSocketChannel.class),
-    EPOLL(() -> Epoll.isAvailable(), () -> new EpollEventLoopGroup(), EpollServerSocketChannel.class),
-    IO_URING(() -> IOUring.isAvailable(), () -> new IOUringEventLoopGroup(), IOUringServerSocketChannel.class);
+    NIO(() -> true, NioEventLoopGroup::new, NioServerSocketChannel.class),
+    EPOLL(Epoll::isAvailable, EpollEventLoopGroup::new, EpollServerSocketChannel.class),
+    IO_URING(IOUring::isAvailable, IOUringEventLoopGroup::new, IOUringServerSocketChannel.class);
 
     private final Supplier<Boolean> isAvailableSupplier;
     private final Supplier<EventLoopGroup> eventLoopGroupSupplier;
