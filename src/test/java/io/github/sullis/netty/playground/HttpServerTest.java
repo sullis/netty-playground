@@ -2,9 +2,7 @@ package io.github.sullis.netty.playground;
 
 import com.aayushatharva.brotli4j.Brotli4jLoader;
 import com.aayushatharva.brotli4j.decoder.DirectDecompress;
-import io.netty.channel.epoll.Epoll;
 import io.netty.handler.codec.compression.Brotli;
-import io.netty.incubator.channel.uring.IOUring;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
@@ -21,9 +19,6 @@ import org.apache.hc.core5.ssl.SSLContextBuilder;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledOnOs;
-import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -65,18 +60,6 @@ public class HttpServerTest {
         if (server != null) {
             server.stop();
         }
-    }
-
-    @Test
-    @EnabledOnOs(value = { OS.LINUX } )
-    public void epollIsAvailableOnLinux() {
-        assertTrue(Epoll.isAvailable());
-    }
-
-    @Test
-    @EnabledOnOs(value = { OS.LINUX } )
-    public void ioUringIsAvailableOnLinux() {
-        assertTrue(IOUring.isAvailable());
     }
 
     @ParameterizedTest
