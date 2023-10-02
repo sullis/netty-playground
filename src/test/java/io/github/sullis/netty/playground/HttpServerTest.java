@@ -19,8 +19,9 @@ import org.apache.hc.core5.ssl.SSLContextBuilder;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import javax.net.ssl.SSLContext;
 import java.net.URI;
@@ -29,6 +30,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -37,7 +39,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(NettyParanoidLeakExtension.class)
 public class HttpServerTest {
     private HttpServer server;
-    private String defaultUrl;
 
     @BeforeAll
     static public void beforeAll() throws Exception {
@@ -52,9 +53,6 @@ public class HttpServerTest {
         Brotli4jLoader.ensureAvailability();
         assertTrue(Brotli4jLoader.isAvailable());
         assertTrue(Brotli.isAvailable());
-        server = new HttpServer();
-        server.start();
-        defaultUrl = server.getDefaultUrl();
     }
 
     @AfterEach
@@ -64,13 +62,16 @@ public class HttpServerTest {
         }
     }
 
-    @Test
-    public void brotliWithApacheHttpClient() throws Exception {
+    @ParameterizedTest
+    @MethodSource("availableNettyTransports")
+    public void brotliWithApacheHttpClient(NettyTransport transport) throws Exception {
+        this.server = new HttpServer(transport);
+        this.server.start();
         SSLContext sslContext = SSLContextBuilder.create().loadTrustMaterial(TrustAllStrategy.INSTANCE).build();
         SSLConnectionSocketFactory socketFactory = SSLConnectionSocketFactoryBuilder.create().setHostnameVerifier(NoopHostnameVerifier.INSTANCE).setSslContext(sslContext).build();
         HttpClientConnectionManager connManager = PoolingHttpClientConnectionManagerBuilder.create().setSSLSocketFactory(socketFactory).build();
         CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(connManager).build();
-        HttpGet httpGet = new HttpGet(defaultUrl);
+        HttpGet httpGet = new HttpGet(this.server.getDefaultUrl());
         httpGet.setHeader("Accept-Encoding", "br");
         CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
         assertEquals("br", httpResponse.getFirstHeader("content-encoding").getValue());
@@ -87,20 +88,24 @@ public class HttpServerTest {
         assertEquals(TestConstants.CONTENT, text);
     }
 
-    @Test
-    public void brotliWithJdkHttpClient_http1() throws Exception {
-        verifyBrotliWithJdkHttpClient(HttpClient.Version.HTTP_1_1);
+    @ParameterizedTest
+    @MethodSource("availableNettyTransports")
+    public void brotliWithJdkHttpClient_http1(NettyTransport transport) throws Exception {
+        verifyBrotliWithJdkHttpClient(HttpClient.Version.HTTP_1_1, transport);
     }
 
-    @Test
-    public void brotliWithJdkHttpClient_http2() throws Exception {
-        verifyBrotliWithJdkHttpClient(HttpClient.Version.HTTP_2);
+    @ParameterizedTest
+    @MethodSource("availableNettyTransports")
+    public void brotliWithJdkHttpClient_http2(NettyTransport transport) throws Exception {
+        verifyBrotliWithJdkHttpClient(HttpClient.Version.HTTP_2, transport);
     }
 
-    private void verifyBrotliWithJdkHttpClient(final HttpClient.Version httpVersion) throws Exception {
+    private void verifyBrotliWithJdkHttpClient(final HttpClient.Version httpVersion, NettyTransport transport) throws Exception {
+        this.server = new HttpServer(transport);
+        this.server.start();
         HttpClient client = HttpUtil.createJdkHttpClient(httpVersion);
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(defaultUrl))
+                .uri(URI.create(this.server.getDefaultUrl()))
                 .setHeader("Accept-Encoding", "br")
                 .timeout(Duration.ofSeconds(1))
                 .build();
@@ -118,5 +123,9 @@ public class HttpServerTest {
         String text = new String(decompressedData, TestConstants.CHARSET);
         assertEquals(TestConstants.CONTENT, text);
     }
-}
 
+    static Stream<NettyTransport> availableNettyTransports() {
+        return Arrays.stream(NettyTransport.values())
+                .filter(NettyTransport::isAvailable);
+    }
+}
