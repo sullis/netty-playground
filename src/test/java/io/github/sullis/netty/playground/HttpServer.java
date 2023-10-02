@@ -19,8 +19,7 @@ import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.channel.socket.ServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslContext;
@@ -52,18 +51,18 @@ public final class HttpServer {
         final SslContext sslCtx = HttpUtil.buildNettySslContext();
 
         // Configure the server.
-        bossGroup = new NioEventLoopGroup();
-        workerGroup = new NioEventLoopGroup();
+        bossGroup = NettyServerUtil.createEventLoopGroup();
+        workerGroup = NettyServerUtil.createEventLoopGroup();
         ServerBootstrap b = new ServerBootstrap();
         b.option(ChannelOption.SO_BACKLOG, 1024);
         b.group(bossGroup, workerGroup)
-         .channel(NioServerSocketChannel.class)
+         .channel(NettyServerUtil.serverSocketChannelClass())
          .handler(new LoggingHandler(NETTYLOG_NAME, LogLevel.INFO))
          .childHandler(new HttpServerInitializer(sslCtx));
 
         Channel ch = b.bind(0).sync().channel();
 
-        InetSocketAddress localAddress = ((NioServerSocketChannel) ch).localAddress();
+        InetSocketAddress localAddress = ((ServerSocketChannel) ch).localAddress();
         this.port = localAddress.getPort();
 
         System.out.println("Server: " + this.getDefaultUrl());
