@@ -16,10 +16,11 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public enum NettyTransport {
-
     NIO(() -> true, NioEventLoopGroup::new, NioServerSocketChannel.class),
     EPOLL(Epoll::isAvailable, EpollEventLoopGroup::new, EpollServerSocketChannel.class),
     IO_URING(IOUring::isAvailable, IOUringEventLoopGroup::new, IOUringServerSocketChannel.class);
+
+    private static final NettyTransport[] ALL_VALUES = values();
 
     private final Supplier<Boolean> isAvailableSupplier;
     private final Supplier<EventLoopGroup> eventLoopGroupSupplier;
@@ -44,7 +45,7 @@ public enum NettyTransport {
     }
 
     public static Stream<NettyTransport> availableTransports() {
-        return Arrays.stream(NettyTransport.values())
+        return Arrays.stream(ALL_VALUES)
                 .filter(NettyTransport::isAvailable);
     }
 }
