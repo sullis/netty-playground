@@ -25,6 +25,7 @@ import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslContext;
 
 import java.net.InetSocketAddress;
+import java.util.Arrays;
 
 import static io.github.sullis.netty.playground.HttpUtil.NETTYLOG_NAME;
 
@@ -37,10 +38,22 @@ public final class HttpServer {
     private EventLoopGroup bossGroup;
     private EventLoopGroup workerGroup;
     private int port = -1;
+    private final NettyTransport transport;
 
     public static void main(String[] args) throws Exception {
         HttpServer server = new HttpServer();
         server.start();
+    }
+
+    public HttpServer() {
+        this(NettyTransport.NIO);
+    }
+
+    public HttpServer(final NettyTransport... transports) {
+        this.transport = Arrays.stream(transports)
+                .filter(NettyTransport::isAvailable)
+                .findFirst()
+                .get();
     }
 
     public int getPort() {
@@ -51,12 +64,12 @@ public final class HttpServer {
         final SslContext sslCtx = HttpUtil.buildNettySslContext();
 
         // Configure the server.
-        bossGroup = NettyServerUtil.createEventLoopGroup();
-        workerGroup = NettyServerUtil.createEventLoopGroup();
+        bossGroup = this.transport.createEventLoopGroup();
+        workerGroup = this.transport.createEventLoopGroup();
         ServerBootstrap b = new ServerBootstrap();
         b.option(ChannelOption.SO_BACKLOG, 1024);
         b.group(bossGroup, workerGroup)
-         .channel(NettyServerUtil.serverSocketChannelClass())
+         .channel(this.transport.getServerSocketChannelClass())
          .handler(new LoggingHandler(NETTYLOG_NAME, LogLevel.INFO))
          .childHandler(new HttpServerInitializer(sslCtx));
 
