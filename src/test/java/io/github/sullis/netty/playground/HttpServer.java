@@ -57,7 +57,6 @@ public final class HttpServer {
                 .filter(NettyTransport::isAvailable)
                 .findFirst()
                 .get();
-        LOGGER.info("NettyTransport=" + this.transport);
     }
 
     public int getPort() {
@@ -65,6 +64,8 @@ public final class HttpServer {
     }
 
     public void start() throws Exception {
+        LOGGER.info("starting server, with NettyTransport=" + this.transport);
+
         final SslContext sslCtx = HttpUtil.buildNettySslContext();
 
         // Configure the server.
