@@ -11,7 +11,9 @@ import io.netty.incubator.channel.uring.IOUring;
 import io.netty.incubator.channel.uring.IOUringEventLoopGroup;
 import io.netty.incubator.channel.uring.IOUringServerSocketChannel;
 
+import java.util.Arrays;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 public enum NettyTransport {
 
@@ -39,5 +41,10 @@ public enum NettyTransport {
 
     public EventLoopGroup createEventLoopGroup() {
         return this.eventLoopGroupSupplier.get();
+    }
+
+    public static Stream<NettyTransport> availableTransports() {
+        return Arrays.stream(NettyTransport.values())
+                .filter(NettyTransport::isAvailable);
     }
 }
