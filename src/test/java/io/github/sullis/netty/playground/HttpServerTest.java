@@ -125,7 +125,6 @@ public class HttpServerTest {
     }
 
     static Stream<NettyTransport> availableNettyTransports() {
-        return Arrays.stream(NettyTransport.values())
-                .filter(NettyTransport::isAvailable);
+        return NettyTransport.availableTransports();
     }
 }
