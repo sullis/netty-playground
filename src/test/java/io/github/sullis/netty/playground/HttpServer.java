@@ -23,6 +23,8 @@ import io.netty.channel.socket.ServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.InetSocketAddress;
 import java.util.Arrays;
@@ -34,6 +36,7 @@ import static io.github.sullis.netty.playground.HttpUtil.NETTYLOG_NAME;
  * in a pretty plaintext form.
  */
 public final class HttpServer {
+    private static final Logger LOGGER = LoggerFactory.getLogger(HttpServer.class);
 
     private EventLoopGroup bossGroup;
     private EventLoopGroup workerGroup;
@@ -54,6 +57,7 @@ public final class HttpServer {
                 .filter(NettyTransport::isAvailable)
                 .findFirst()
                 .get();
+        LOGGER.info("NettyTransport=" + this.transport);
     }
 
     public int getPort() {
