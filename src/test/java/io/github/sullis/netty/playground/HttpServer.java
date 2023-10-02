@@ -52,8 +52,8 @@ public final class HttpServer {
         final SslContext sslCtx = HttpUtil.buildNettySslContext();
 
         // Configure the server.
-        EventLoopGroup bossGroup = new NioEventLoopGroup();
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
+        bossGroup = new NioEventLoopGroup();
+        workerGroup = new NioEventLoopGroup();
         ServerBootstrap b = new ServerBootstrap();
         b.option(ChannelOption.SO_BACKLOG, 1024);
         b.group(bossGroup, workerGroup)
