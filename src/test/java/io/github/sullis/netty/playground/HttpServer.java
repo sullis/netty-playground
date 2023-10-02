@@ -63,6 +63,10 @@ public final class HttpServer {
         return this.port;
     }
 
+    public NettyTransport getNettyTransport() {
+        return this.transport;
+    }
+
     public void start() throws Exception {
         LOGGER.info("starting server, with NettyTransport=" + this.transport);
 
@@ -83,7 +87,7 @@ public final class HttpServer {
         InetSocketAddress localAddress = ((ServerSocketChannel) ch).localAddress();
         this.port = localAddress.getPort();
 
-        System.out.println("Server: " + this.getDefaultUrl());
+        System.out.println("Server: " + this.transport + " " + this.getDefaultUrl());
 
         // ch.closeFuture().sync();
     }
