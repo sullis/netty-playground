@@ -1,10 +1,13 @@
 package io.github.sullis.netty.playground;
 
-import static org.apache.commons.lang3.SystemUtils.IS_OS_LINUX;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.junit.jupiter.api.Test;
 
 import io.netty.incubator.channel.uring.IOUring;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  *
@@ -13,14 +16,12 @@ import io.netty.incubator.channel.uring.IOUring;
  */
 public class IoUringTest {
     @Test
-    public void testUringTransport() {
-        System.out.println("Linux: " + IS_OS_LINUX);
-        if (IS_OS_LINUX) {
-            final Throwable cause = IOUring.unavailabilityCause();
-            if (cause != null) {
-                System.err.println("unavailabilityCause: " + ExceptionUtils.getStackTrace(cause));
-            }
+    @EnabledOnOs(value = OS.LINUX)
+    public void ioUringIsAvailableOnLinux() {
+        final Throwable cause = IOUring.unavailabilityCause();
+        if (cause != null) {
+            System.err.println("unavailabilityCause: " + ExceptionUtils.getStackTrace(cause));
         }
-        System.out.println("IOUring.isAvailable: " + IOUring.isAvailable());
+        assertThat(IOUring.isAvailable()).isTrue();
     }
 }
