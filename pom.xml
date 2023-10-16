@@ -17,6 +17,7 @@
 
   <properties>
     <junit.version>5.10.0</junit.version>
+    <stacksrc.version>0.6.0</stacksrc.version>
     <logback.version>1.4.11</logback.version>
     <slf4j.version>2.0.9</slf4j.version>
     <bouncycastle.version>1.70</bouncycastle.version>
@@ -265,6 +266,12 @@
           <scope>test</scope>
       </dependency>
     <dependency>
+        <groupId>nz.lae.stacksrc</groupId>
+        <artifactId>stacksrc-junit5</artifactId>
+        <version>${stacksrc.version}</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
         <groupId>org.awaitility</groupId>
         <artifactId>awaitility</artifactId>
         <version>4.2.0</version>
@@ -318,7 +325,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>3.1.2</version>
         <configuration>
-          <argLine>-Xcheck:jni</argLine>
+          <argLine>-Xcheck:jni -Djunit.jupiter.extensions.autodetection.enabled=true</argLine>
           <forkCount>8</forkCount>
           <reuseForks>true</reuseForks>
         </configuration>
