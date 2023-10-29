@@ -6,6 +6,7 @@ import net.bytebuddy.agent.ByteBuddyAgent;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.agent.builder.ResettableClassFileTransformer;
 import net.bytebuddy.description.method.MethodDescription;
+import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassReloadingStrategy;
 import net.bytebuddy.implementation.FixedValue;
 import net.bytebuddy.matcher.ElementMatcher;
@@ -27,10 +28,15 @@ public class TrustManagerFactoryAgent {
 
     public static void install() {
         Instrumentation instrumentation = ByteBuddyAgent.install();
-        System.out.println("instrumentation: " + instrumentation.getClass().getName());
-        ByteBuddy byteBuddy = new ByteBuddy();
-        byteBuddy.ignore(none())
-                .redefine(TARGET_CLAZZ).method(METHOD_MATCHER).intercept(GET_INSTANCE_RESULT).make().load(TARGET_CLAZZ_LOADER, ClassReloadingStrategy.fromInstalledAgent());
+        System.out.println("install: instrumentation " + instrumentation.getClass().getName());
+        DynamicType.Loaded<TrustManagerFactory> loadedType = new ByteBuddy()
+            .ignore(none())
+            .redefine(TARGET_CLAZZ)
+            .method(METHOD_MATCHER)
+            .intercept(GET_INSTANCE_RESULT)
+            .make()
+            .load(TARGET_CLAZZ_LOADER, ClassReloadingStrategy.fromInstalledAgent());
+        System.out.println("install: loaded type " + loadedType.getLoaded().getName());
     }
 
     public static void installOn(Instrumentation instrumentation) {
