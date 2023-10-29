@@ -16,6 +16,7 @@
   </licenses>
 
   <properties>
+    <bytebuddy.version>1.14.9</bytebuddy.version>
     <junit.version>5.10.0</junit.version>
     <stacksrc.version>0.6.0</stacksrc.version>
     <logback.version>1.4.11</logback.version>
@@ -82,6 +83,16 @@
   </dependencyManagement>
 
   <dependencies>
+      <dependency>
+          <groupId>net.bytebuddy</groupId>
+          <artifactId>byte-buddy</artifactId>
+          <version>${bytebuddy.version}</version>
+      </dependency>
+      <dependency>
+          <groupId>net.bytebuddy</groupId>
+          <artifactId>byte-buddy-agent</artifactId>
+          <version>${bytebuddy.version}</version>
+      </dependency>
       <dependency>
           <groupId>io.netty</groupId>
           <artifactId>netty-common</artifactId>
