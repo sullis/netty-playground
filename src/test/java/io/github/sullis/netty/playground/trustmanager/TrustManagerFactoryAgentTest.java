@@ -1,5 +1,6 @@
 package io.github.sullis.netty.playground.trustmanager;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import javax.net.ssl.TrustManager;
@@ -9,7 +10,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class TrustManagerFactoryAgentTest {
-    static {
+    @BeforeAll
+    static void beforeAllTests() {
         TrustManagerFactoryAgent.install();
     }
 
