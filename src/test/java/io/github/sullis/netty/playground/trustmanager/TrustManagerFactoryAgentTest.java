@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class TrustManagerFactoryAgentTest {
     @BeforeAll
-    static void beforeAllTests() {
+    static void beforeAllTests() throws Exception {
         TrustManagerFactoryAgent.install();
     }
 
