@@ -7,7 +7,7 @@ import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.agent.builder.ResettableClassFileTransformer;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.dynamic.DynamicType;
-import net.bytebuddy.dynamic.loading.ClassReloadingStrategy;
+import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.implementation.FixedValue;
 import net.bytebuddy.matcher.ElementMatcher;
 import static net.bytebuddy.matcher.ElementMatchers.named;
@@ -20,7 +20,6 @@ import java.lang.instrument.Instrumentation;
 
 public class TrustManagerFactoryAgent {
     private static final Class<TrustManagerFactory> TARGET_CLAZZ = javax.net.ssl.TrustManagerFactory.class;
-    private static final ClassLoader TARGET_CLAZZ_LOADER  = TARGET_CLAZZ.getClassLoader();
     private static final String TARGET_CLAZZ_NAME = TARGET_CLAZZ.getName();
     private static final TrustManagerFactory TMF_INSTANCE = InsecureTrustManagerFactory.INSTANCE;
     private static final ElementMatcher.Junction<MethodDescription> METHOD_MATCHER = named("getInstance").and(takesArguments(String.class)).and(returns(named(TARGET_CLAZZ_NAME)));
@@ -35,7 +34,8 @@ public class TrustManagerFactoryAgent {
             .method(METHOD_MATCHER)
             .intercept(GET_INSTANCE_RESULT)
             .make()
-            .load(TARGET_CLAZZ_LOADER, ClassReloadingStrategy.fromInstalledAgent());
+            .load(Object.class.getClassLoader(), ClassLoadingStrategy.Default.WRAPPER);
+        System.out.println("install: allLoaded " + loadedType.getAllLoaded().keySet());
         System.out.println("install: loaded type " + loadedType.getLoaded().getName());
     }
 
