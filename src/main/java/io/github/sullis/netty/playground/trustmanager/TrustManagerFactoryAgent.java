@@ -42,7 +42,7 @@ public class TrustManagerFactoryAgent {
         System.out.println("install: instrumentation " + instrumentation.getClass().getName());
 
         final File folder = createFolder();
-        ClassLoadingStrategy<ClassLoader> bootstrapStrategy = new ClassLoadingStrategy.ForBootstrapInjection(instrumentation, folder);
+        ClassLoadingStrategy<ClassLoader> classLoadingStrategy = new ClassLoadingStrategy.ForBootstrapInjection(instrumentation, folder);
 
         DynamicType.Loaded<?> loadedType = new ByteBuddy()
             .ignore(none())
@@ -50,7 +50,7 @@ public class TrustManagerFactoryAgent {
             .method(METHOD_MATCHER)
             .intercept(GET_INSTANCE_RESULT)
             .make()
-            .load(ClassReloadingStrategy.BOOTSTRAP_LOADER, bootstrapStrategy);
+            .load(ClassReloadingStrategy.BOOTSTRAP_LOADER, classLoadingStrategy);
         System.out.println("install: allLoaded " + loadedType.getAllLoaded().keySet());
         System.out.println("install: loaded type " + loadedType.getLoaded().getName());
     }
