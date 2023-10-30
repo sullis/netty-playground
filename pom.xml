@@ -20,7 +20,7 @@
     <stacksrc.version>0.6.0</stacksrc.version>
     <logback.version>1.4.11</logback.version>
     <slf4j.version>2.0.9</slf4j.version>
-    <bouncycastle.version>1.70</bouncycastle.version>
+    <bouncycastle.version>1.76</bouncycastle.version>
     <brotli4j.version>1.12.0</brotli4j.version>
     <skip.tests>false</skip.tests>
   </properties>
@@ -160,13 +160,13 @@
       </dependency>
       <dependency>
           <groupId>org.bouncycastle</groupId>
-          <artifactId>bcprov-jdk15on</artifactId>
+          <artifactId>bcprov-jdk18on</artifactId>
           <version>${bouncycastle.version}</version>
           <scope>runtime</scope>
       </dependency>
       <dependency>
           <groupId>org.bouncycastle</groupId>
-          <artifactId>bcpkix-jdk15on</artifactId>
+          <artifactId>bcpkix-jdk18on</artifactId>
           <version>${bouncycastle.version}</version>
           <scope>runtime</scope>
       </dependency>
