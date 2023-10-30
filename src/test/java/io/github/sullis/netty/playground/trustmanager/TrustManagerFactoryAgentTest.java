@@ -10,7 +10,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class TrustManagerFactoryAgentTest {
-    private static final String DEFAULT_ALGORITHM = "PKIX";
 
     @BeforeAll
     static void beforeAllTests() throws Exception {
@@ -19,7 +18,7 @@ public class TrustManagerFactoryAgentTest {
 
     @Test
     void happyPath() throws Exception {
-        TrustManagerFactory tmf = TrustManagerFactory.getInstance(DEFAULT_ALGORITHM);
+        TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactoryAgent.DEFAULT_ALGORITHM);
         TrustManager[] trustManagers = tmf.getTrustManagers();
         assertThat(trustManagers).hasSize(1);
         TrustManager tm = trustManagers[0];

@@ -20,9 +20,10 @@ import java.io.IOException;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
-import java.security.Security;
 
 public class TrustManagerFactoryAgent {
+    public static final String DEFAULT_ALGORITHM = "PKIX";
+
     private static final String TARGET_CLAZZ_NAME = "javax.net.ssl.TrustManagerFactory";
     private static final Class<?> TARGET_CLAZZ = findClass(TARGET_CLAZZ_NAME);
     private static final Method GET_INSTANCE_METHOD = findMethod(TARGET_CLAZZ, "getInstance", String.class);
@@ -62,7 +63,7 @@ public class TrustManagerFactoryAgent {
 
         Class<?> loadedClazz = loadedType.getLoaded();
         Method m = loadedClazz.getMethod("getInstance", String.class);
-        Object result = m.invoke(null, "PKIX");
+        Object result = m.invoke(null, DEFAULT_ALGORITHM);
         System.out.println(result);
     }
 
