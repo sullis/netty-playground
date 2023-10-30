@@ -7,6 +7,7 @@ import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.agent.builder.ResettableClassFileTransformer;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.dynamic.DynamicType;
+import net.bytebuddy.dynamic.TypeResolutionStrategy;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.dynamic.loading.ClassReloadingStrategy;
 import net.bytebuddy.implementation.FixedValue;
@@ -21,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.instrument.Instrumentation;
 import java.nio.file.Files;
+import java.security.Security;
 
 public class TrustManagerFactoryAgent {
     private static final String TARGET_CLAZZ_NAME = "javax.net.ssl.TrustManagerFactory";
@@ -38,6 +40,7 @@ public class TrustManagerFactoryAgent {
     }
 
     public static void install() throws Exception {
+        Security.setProperty("foo", "bar");
         Instrumentation instrumentation = ByteBuddyAgent.install();
         System.out.println("install: instrumentation " + instrumentation.getClass().getName());
 
@@ -49,7 +52,7 @@ public class TrustManagerFactoryAgent {
             .redefine(TARGET_CLAZZ)
             .method(METHOD_MATCHER)
             .intercept(GET_INSTANCE_RESULT)
-            .make()
+            .make(TypeResolutionStrategy.Lazy.INSTANCE)
             .load(ClassReloadingStrategy.BOOTSTRAP_LOADER, classLoadingStrategy);
         System.out.println("install: allLoaded " + loadedType.getAllLoaded().keySet());
         System.out.println("install: loaded type " + loadedType.getLoaded().getName());
