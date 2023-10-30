@@ -46,7 +46,6 @@ public class TrustManagerFactoryAgent {
     }
 
     public static void install() throws Exception {
-        Security.setProperty("foo", "bar");
         Instrumentation instrumentation = ByteBuddyAgent.install();
         System.out.println("install: instrumentation " + instrumentation.getClass().getName());
 
