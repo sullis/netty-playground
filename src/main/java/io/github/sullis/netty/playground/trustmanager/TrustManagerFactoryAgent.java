@@ -5,36 +5,42 @@ import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.ByteBuddyAgent;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.agent.builder.ResettableClassFileTransformer;
-import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.TypeResolutionStrategy;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.dynamic.loading.ClassReloadingStrategy;
 import net.bytebuddy.implementation.FixedValue;
-import net.bytebuddy.matcher.ElementMatcher;
+import static net.bytebuddy.matcher.ElementMatchers.is;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static net.bytebuddy.matcher.ElementMatchers.none;
-import static net.bytebuddy.matcher.ElementMatchers.returns;
-import static net.bytebuddy.matcher.ElementMatchers.takesArguments;
 
 import javax.net.ssl.TrustManagerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.lang.instrument.Instrumentation;
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.security.Security;
 
 public class TrustManagerFactoryAgent {
     private static final String TARGET_CLAZZ_NAME = "javax.net.ssl.TrustManagerFactory";
     private static final Class<?> TARGET_CLAZZ = findClass(TARGET_CLAZZ_NAME);
+    private static final Method GET_INSTANCE_METHOD = findMethod(TARGET_CLAZZ, "getInstance", String.class);
     private static final TrustManagerFactory TMF_INSTANCE = InsecureTrustManagerFactory.INSTANCE;
-    private static final ElementMatcher.Junction<MethodDescription> METHOD_MATCHER = named("getInstance").and(takesArguments(String.class)).and(returns(named(TARGET_CLAZZ_NAME)));
     private static final FixedValue.AssignerConfigurable GET_INSTANCE_RESULT = FixedValue.value(TMF_INSTANCE);
 
     static Class<?> findClass(String className) {
         try {
             return Class.forName(className);
         } catch (ClassNotFoundException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    static Method findMethod(Class<?> clazz, String methodName, Class<?>... methodParameterTypes) {
+        try {
+            return clazz.getMethod(methodName, methodParameterTypes);
+        } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
     }
@@ -50,12 +56,15 @@ public class TrustManagerFactoryAgent {
         DynamicType.Loaded<?> loadedType = new ByteBuddy()
             .ignore(none())
             .redefine(TARGET_CLAZZ)
-            .method(METHOD_MATCHER)
+            .method(is(GET_INSTANCE_METHOD))
             .intercept(GET_INSTANCE_RESULT)
             .make(TypeResolutionStrategy.Lazy.INSTANCE)
             .load(ClassReloadingStrategy.BOOTSTRAP_LOADER, classLoadingStrategy);
-        System.out.println("install: allLoaded " + loadedType.getAllLoaded().keySet());
-        System.out.println("install: loaded type " + loadedType.getLoaded().getName());
+
+        Class<?> loadedClazz = loadedType.getLoaded();
+        Method m = loadedClazz.getMethod("getInstance", String.class);
+        Object result = m.invoke(null, "PKIX");
+        System.out.println(result);
     }
 
     public static void installOn(Instrumentation instrumentation) {
@@ -78,7 +87,7 @@ public class TrustManagerFactoryAgent {
                 .ignore(none())
                 .type(named(TARGET_CLAZZ_NAME))
                 .transform((builder, type, classLoader, module, protectionDomain) ->
-                                builder.method(METHOD_MATCHER)
+                                builder.method(is(GET_INSTANCE_METHOD))
                                         .intercept(GET_INSTANCE_RESULT));
     }
 
