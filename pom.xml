@@ -19,7 +19,7 @@
     <bytebuddy.version>1.14.10</bytebuddy.version>
     <junit.version>5.10.1</junit.version>
     <stacksrc.version>0.6.0</stacksrc.version>
-    <logback.version>1.4.11</logback.version>
+    <logback.version>1.4.13</logback.version>
     <slf4j.version>2.0.9</slf4j.version>
     <bouncycastle.version>1.76</bouncycastle.version>
     <brotli4j.version>1.13.0</brotli4j.version>
