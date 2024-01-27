@@ -16,7 +16,7 @@
   </licenses>
 
   <properties>
-    <bytebuddy.version>1.14.10</bytebuddy.version>
+    <bytebuddy.version>1.14.11</bytebuddy.version>
     <junit.version>5.10.1</junit.version>
     <stacksrc.version>0.6.0</stacksrc.version>
     <logback.version>1.4.14</logback.version>
