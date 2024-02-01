@@ -11,9 +11,12 @@ public class NettyParanoidLeakExtension
     implements BeforeAllCallback, BeforeEachCallback, AfterEachCallback, AfterAllCallback {
 
     private static final NettyLeakListener leakListener;
+    private static final String LEAK_DETECTION_LEVEL_PROP_KEY = "io.netty.leakDetection.level";
 
     static {
-        System.setProperty("io.netty.leakDetection.level", "paranoid");
+        if (System.getProperty(LEAK_DETECTION_LEVEL_PROP_KEY) != null) {
+            System.setProperty(LEAK_DETECTION_LEVEL_PROP_KEY, "paranoid");
+        }
         leakListener = new NettyLeakListener();
         ByteBufUtil.setLeakListener(leakListener);
     }
