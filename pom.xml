@@ -170,6 +170,11 @@
           <classifier>linux-x86_64</classifier>
       </dependency>
       <dependency>
+          <groupId>io.netty.incubator</groupId>
+          <artifactId>netty-incubator-codec-http3</artifactId>
+          <version>0.0.25.Final</version>
+      </dependency>
+      <dependency>
           <groupId>org.bouncycastle</groupId>
           <artifactId>bcprov-jdk18on</artifactId>
           <version>${bouncycastle.version}</version>
