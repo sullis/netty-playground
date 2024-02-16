@@ -2,7 +2,6 @@ package io.github.sullis.netty.playground.trustmanager;
 
 import io.github.classbuddy4j.trustmanager.InsecureTrustManager;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import javax.net.ssl.TrustManager;
@@ -16,10 +15,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import io.github.classbuddy4j.trustmanager.Installer;
 
-public class InsecureTrustManagerFactoryAgentTest {
+public class InsecureTrustManagerFactoryTest {
     private static final String DEFAULT_ALGORITHM = "PKIX";
     private static final TrustManagerFactory initialTrustManagerFactory;
 
@@ -58,7 +56,6 @@ public class InsecureTrustManagerFactoryAgentTest {
     }
 
     @Test
-    @Disabled
     void exceptionThrownWhenAlgorithmIsBogus() {
         assertThatThrownBy(() -> { TrustManagerFactory.getInstance("bogus"); })
                 .isInstanceOf(NoSuchAlgorithmException.class);
