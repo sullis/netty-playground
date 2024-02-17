@@ -14,7 +14,7 @@ public class NettyParanoidLeakExtension
     private static final String LEAK_DETECTION_LEVEL_PROP_KEY = "io.netty.leakDetection.level";
 
     static {
-        if (System.getProperty(LEAK_DETECTION_LEVEL_PROP_KEY) != null) {
+        if (System.getProperty(LEAK_DETECTION_LEVEL_PROP_KEY) == null) {
             System.setProperty(LEAK_DETECTION_LEVEL_PROP_KEY, "paranoid");
         }
         leakListener = new NettyLeakListener();
