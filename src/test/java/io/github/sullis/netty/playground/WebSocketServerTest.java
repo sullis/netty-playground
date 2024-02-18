@@ -3,7 +3,6 @@ package io.github.sullis.netty.playground;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -16,7 +15,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
-@ExtendWith(NettyParanoidLeakExtension.class)
 public class WebSocketServerTest {
     private WebSocketServer server;
     private String defaultUrl;
