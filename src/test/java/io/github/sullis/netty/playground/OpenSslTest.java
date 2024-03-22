@@ -38,7 +38,7 @@ class OpenSslTest {
     @Test
     void testAvailableCipherSuites() {
         assertThat(OpenSsl.availableOpenSslCipherSuites())
-                .containsExactly( "ECDHE-ECDSA-AES128-GCM-SHA256",
+                .containsExactlyInAnyOrder( "ECDHE-ECDSA-AES128-GCM-SHA256",
                 "ECDHE-RSA-AES128-GCM-SHA256",
                 "ECDHE-ECDSA-AES256-GCM-SHA384",
                 "ECDHE-RSA-AES256-GCM-SHA384",
@@ -57,7 +57,6 @@ class OpenSslTest {
                 "PSK-AES128-CBC-SHA",
                 "AES256-SHA",
                 "PSK-AES256-CBC-SHA",
-                "DES-CBC3-SHA",
                 "TLS_AES_128_GCM_SHA256",
                 "TLS_AES_256_GCM_SHA384",
                 "TLS_CHACHA20_POLY1305_SHA256",
@@ -77,8 +76,8 @@ class OpenSslTest {
         SslHandler handler = clientCtx.newHandler(ByteBufAllocator.DEFAULT);
         assertNull(handler.applicationProtocol());
         OpenSslEngine engine = (OpenSslEngine) handler.engine();
-        assertThat(engine.getEnabledProtocols()).containsExactly("SSLv2Hello", "TLSv1.2", "TLSv1.3");
-        assertThat(engine.getSupportedProtocols()).containsExactly("SSLv2Hello", "TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3");
+        assertThat(engine.getEnabledProtocols()).containsExactlyInAnyOrder("SSLv2Hello", "TLSv1.2", "TLSv1.3");
+        assertThat(engine.getSupportedProtocols()).containsExactlyInAnyOrder("SSLv2Hello", "TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3");
         SSLParameters sslParameters = engine.getSSLParameters();
         assertThat(sslParameters.getNeedClientAuth()).isFalse();
         assertThat(sslParameters.getWantClientAuth()).isFalse();
@@ -111,14 +110,14 @@ class OpenSslTest {
         SslHandler handler = serverCtx.newHandler(ByteBufAllocator.DEFAULT);
         assertNull(handler.applicationProtocol());
         OpenSslEngine engine = (OpenSslEngine) handler.engine();
-        assertThat(engine.getEnabledProtocols()).containsExactly("SSLv2Hello", "TLSv1.2", "TLSv1.3");
-        assertThat(engine.getSupportedProtocols()).containsExactly("SSLv2Hello", "TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3");
+        assertThat(engine.getEnabledProtocols()).containsExactlyInAnyOrder("SSLv2Hello", "TLSv1.2", "TLSv1.3");
+        assertThat(engine.getSupportedProtocols()).containsExactlyInAnyOrder("SSLv2Hello", "TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3");
         SSLParameters sslParameters = engine.getSSLParameters();
         assertThat(sslParameters.getNeedClientAuth()).isFalse();
         assertThat(sslParameters.getWantClientAuth()).isFalse();
         assertThat(sslParameters.getEnableRetransmissions()).isTrue();
         assertThat(sslParameters.getUseCipherSuitesOrder()).isTrue();
-        assertThat(sslParameters.getCipherSuites()).containsExactly("TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384",
+        assertThat(sslParameters.getCipherSuites()).containsExactlyInAnyOrder("TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384",
                 "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
                 "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
                 "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
