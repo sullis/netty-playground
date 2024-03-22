@@ -1,5 +1,6 @@
 package io.github.sullis.netty.playground;
 
+import io.github.nettyplus.leakdetector.junit.NettyLeakDetectorExtension;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.handler.ssl.OpenSsl;
 import io.netty.handler.ssl.OpenSslClientContext;
@@ -12,6 +13,7 @@ import io.netty.handler.ssl.SslProvider;
 import io.netty.handler.ssl.util.SelfSignedCertificate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import javax.net.ssl.SSLParameters;
 
@@ -20,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ExtendWith(NettyLeakDetectorExtension.class)
 class OpenSslTest {
     @BeforeEach
     void beforeEach() {
