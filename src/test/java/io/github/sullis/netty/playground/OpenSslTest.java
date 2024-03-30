@@ -28,12 +28,15 @@ class OpenSslTest {
     void beforeEach() {
         OpenSsl.ensureAvailability();
         assertTrue(OpenSsl.isAvailable());
+        assertThat(OpenSsl.unavailabilityCause()).isNull();
     }
 
     @Test
     void testBoringSsl() throws Exception {
         assertThat(OpenSsl.versionString()).isEqualTo("BoringSSL");
         assertThat(OpenSsl.supportsKeyManagerFactory()).isTrue();
+        assertThat(OpenSslServerContext.defaultClientProvider().name()).isEqualTo("OPENSSL");
+        assertThat(OpenSslServerContext.defaultServerProvider().name()).isEqualTo("OPENSSL");
         assertTrue(SslProvider.isAlpnSupported(SslProvider.OPENSSL));
         assertTrue(SslProvider.isTlsv13Supported(SslProvider.OPENSSL));
     }
