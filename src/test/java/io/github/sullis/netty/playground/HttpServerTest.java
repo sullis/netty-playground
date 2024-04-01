@@ -4,6 +4,7 @@ import com.aayushatharva.brotli4j.Brotli4jLoader;
 import com.aayushatharva.brotli4j.decoder.DirectDecompress;
 import io.github.nettyplus.leakdetector.junit.NettyLeakDetectorExtension;
 import io.netty.handler.codec.compression.Brotli;
+import io.netty.handler.codec.compression.Zstd;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
@@ -50,10 +51,16 @@ public class HttpServerTest {
     }
 
     @BeforeEach
-    public void beforeEach() throws Exception {
+    public void brotliIsAvailable() throws Throwable {
         Brotli4jLoader.ensureAvailability();
         assertTrue(Brotli4jLoader.isAvailable());
         assertTrue(Brotli.isAvailable());
+    }
+
+    @BeforeEach
+    public void zstdIsAvailable() throws Throwable {
+        Zstd.ensureAvailability();
+        assertTrue(Zstd.isAvailable());
     }
 
     @AfterEach
@@ -61,6 +68,30 @@ public class HttpServerTest {
         if (server != null) {
             server.stop();
         }
+    }
+
+    @ParameterizedTest
+    @MethodSource("availableNettyTransports")
+    public void zstdWithApacheHttpClient(NettyTransport transport) throws Exception {
+        this.server = new HttpServer(transport);
+        this.server.start();
+        SSLContext sslContext = SSLContextBuilder.create().loadTrustMaterial(TrustAllStrategy.INSTANCE).build();
+        SSLConnectionSocketFactory socketFactory = SSLConnectionSocketFactoryBuilder.create().setHostnameVerifier(NoopHostnameVerifier.INSTANCE).setSslContext(sslContext).build();
+        HttpClientConnectionManager connManager = PoolingHttpClientConnectionManagerBuilder.create().setSSLSocketFactory(socketFactory).build();
+        CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(connManager).build();
+        HttpGet httpGet = new HttpGet(this.server.getDefaultUrl());
+        httpGet.setHeader("Accept-Encoding", "zstd");
+        CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
+        assertEquals("zstd", httpResponse.getFirstHeader("content-encoding").getValue());
+        HttpEntity responseEntity = httpResponse.getEntity();
+        assertEquals("text/plain", responseEntity.getContentType());
+        byte[] compressedData = EntityUtils.toByteArray(responseEntity);
+        System.out.println("HTTP response compressedData length: " + compressedData.length);
+        System.out.println("HTTP response compressedData: " + Arrays.toString(compressedData));
+        byte[] decompressedData = com.github.luben.zstd.Zstd.decompress(compressedData, 50_000);
+        assertNotNull(decompressedData, "decompressedData");
+        String text = new String(decompressedData, TestConstants.CHARSET);
+        assertEquals(TestConstants.CONTENT, text);
     }
 
     @ParameterizedTest
