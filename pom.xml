@@ -26,6 +26,14 @@
     <skip.tests>false</skip.tests>
   </properties>
 
+  <repositories>
+   <repository>
+     <id>netty-snapshots</id>
+     <name>netty-snapshots</name>
+     <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+   </repository>
+  </repositories>
+
     <profiles>
         <profile>
             <id>native</id>
@@ -75,7 +83,7 @@
       <dependency>
         <groupId>io.netty</groupId>
         <artifactId>netty-bom</artifactId>
-        <version>4.1.109.Final</version>
+        <version>4.2.0.Final-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
