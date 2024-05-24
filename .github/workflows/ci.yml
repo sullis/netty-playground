@@ -13,7 +13,7 @@ jobs:
   build:
     strategy:
       matrix:
-        java: [ '21', '22' ]
+        java: [ '21' ]
         os: [ 'ubuntu-latest' ]
         netty_allocator_type: [ 'pooled', 'adaptive' ]
     runs-on: ${{ matrix.os }}
