@@ -9,4 +9,5 @@ Netty experiments + test suite
 - 2019: [Netty 5 Lessons Learned - Scale by the Bay](https://www.youtube.com/watch?v=hvYqSz_BgUM) - Norman Maurer
 - 2017: [Zuul's Journey to non-blocking](https://www.youtube.com/watch?v=2oXqbLhMS_A) - Arthur Gonigberg
 - 2016: [Netty - Devoxx Belgium](https://www.youtube.com/watch?v=DKJ0w30M0vg) - Norman Maurer
+- 2015: [Netty at Apple](http://www.infoq.com/presentations/apple-netty) - Norman Maurer @ QCon SF 2015
 - 2014: [Why Netty?](http://normanmaurer.me/presentations/2014-netflix-netty/slides.html) - Norman Maurer
