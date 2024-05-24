@@ -15,6 +15,7 @@ jobs:
       matrix:
         java: [ '21', '22' ]
         os: [ 'ubuntu-latest' ]
+        netty_allocator_type: [ 'pooled', 'adaptive' ]
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v4
@@ -27,4 +28,4 @@ jobs:
     - name: ulimit
       run: ulimit -l
     - name: Build
-      run: sudo -E bash -c "ulimit -l 65536 && ulimit -a && mvn --update-snapshots --no-transfer-progress -B clean test"
+      run: sudo -E bash -c "ulimit -l 65536 && ulimit -a && mvn --update-snapshots --no-transfer-progress -B clean test -Dio.netty.allocator.type=${{ matrix.netty_allocator_type }}"
