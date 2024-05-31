@@ -15,3 +15,8 @@ Netty experiments + test suite
 - 2016: [Netty - Devoxx Belgium](https://www.youtube.com/watch?v=DKJ0w30M0vg) - Norman Maurer
 - 2015: [Netty at Apple](http://www.infoq.com/presentations/apple-netty) - Norman Maurer @ QCon SF 2015
 - 2014: [Why Netty?](http://normanmaurer.me/presentations/2014-netflix-netty/slides.html) - Norman Maurer
+
+# Articles
+
+- [Netty @ Linkedin](https://www.linkedin.com/blog/engineering/infrastructure/solving-espresso-s-scalability-and-performance-challenges-to-sup)
+  
