@@ -83,7 +83,7 @@
       <dependency>
         <groupId>io.netty</groupId>
         <artifactId>netty-bom</artifactId>
-        <version>4.2.0.Alpha1</version>
+        <version>${netty.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -164,11 +164,13 @@
       <dependency>
           <groupId>io.netty</groupId>
           <artifactId>netty-transport-native-io_uring</artifactId>
+          <version>${netty.version}</version>
           <classifier>linux-x86_64</classifier>
       </dependency>
       <dependency>
           <groupId>io.netty</groupId>
           <artifactId>netty-transport-native-io_uring</artifactId>
+          <version>${netty.version}</version>
           <classifier>linux-aarch_64</classifier>
       </dependency>
       <dependency>
