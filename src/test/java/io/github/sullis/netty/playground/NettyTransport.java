@@ -1,34 +1,34 @@
 package io.github.sullis.netty.playground;
 
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.IoHandlerFactory;
 import io.netty.channel.epoll.Epoll;
-import io.netty.channel.epoll.EpollEventLoopGroup;
+import io.netty.channel.epoll.EpollIoHandler;
 import io.netty.channel.epoll.EpollServerSocketChannel;
-import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.nio.NioIoHandler;
 import io.netty.channel.socket.ServerSocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.incubator.channel.uring.IOUring;
-import io.netty.incubator.channel.uring.IOUringEventLoopGroup;
-import io.netty.incubator.channel.uring.IOUringServerSocketChannel;
+import io.netty.channel.uring.IoUring;
+import io.netty.channel.uring.IoUringIoHandler;
+import io.netty.channel.uring.IoUringServerSocketChannel;
 
 import java.util.Arrays;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public enum NettyTransport {
-    NIO(() -> true, NioEventLoopGroup::new, NioServerSocketChannel.class),
-    EPOLL(Epoll::isAvailable, EpollEventLoopGroup::new, EpollServerSocketChannel.class),
-    IO_URING(IOUring::isAvailable, IOUringEventLoopGroup::new, IOUringServerSocketChannel.class);
+    NIO(() -> true, NioIoHandler::newFactory, NioServerSocketChannel.class),
+    EPOLL(Epoll::isAvailable, EpollIoHandler::newFactory, EpollServerSocketChannel.class),
+    IO_URING(IoUring::isAvailable, IoUringIoHandler::newFactory, IoUringServerSocketChannel.class);
 
     private static final NettyTransport[] ALL_VALUES = values();
 
     private final Supplier<Boolean> isAvailableSupplier;
-    private final Supplier<EventLoopGroup> eventLoopGroupSupplier;
+    private final Supplier<IoHandlerFactory> ioHandlerFactorySupplier;
     private final Class<? extends ServerSocketChannel> serverSocketChannelClass;
 
-    NettyTransport(Supplier<Boolean> isAvailable, Supplier<EventLoopGroup> eventLoopGroup, Class<? extends ServerSocketChannel> serverSocketClass) {
+    NettyTransport(Supplier<Boolean> isAvailable, Supplier<IoHandlerFactory> ioHandlerFactory, Class<? extends ServerSocketChannel> serverSocketClass) {
         this.isAvailableSupplier = isAvailable;
-        this.eventLoopGroupSupplier = eventLoopGroup;
+        this.ioHandlerFactorySupplier= ioHandlerFactory;
         this.serverSocketChannelClass = serverSocketClass;
     }
 
@@ -40,8 +40,8 @@ public enum NettyTransport {
         return this.serverSocketChannelClass;
     }
 
-    public EventLoopGroup createEventLoopGroup() {
-        return this.eventLoopGroupSupplier.get();
+    public IoHandlerFactory createIoHandlerFactory() {
+        return this.ioHandlerFactorySupplier.get();
     }
 
     public static Stream<NettyTransport> availableTransports() {

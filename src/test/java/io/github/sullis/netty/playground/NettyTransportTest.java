@@ -1,7 +1,7 @@
 package io.github.sullis.netty.playground;
 
 import io.netty.channel.epoll.Epoll;
-import io.netty.incubator.channel.uring.IOUring;
+import io.netty.channel.uring.IoUring;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
@@ -28,7 +28,7 @@ public class NettyTransportTest {
     @Test
     @EnabledOnOs(value = { OS.LINUX } )
     public void ioUringIsAvailableOnLinux() {
-        assertTrue(IOUring.isAvailable());
+        assertTrue(IoUring.isAvailable());
         assertTrue(NettyTransport.IO_URING.isAvailable());
     }
 
