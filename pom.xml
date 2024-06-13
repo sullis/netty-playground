@@ -161,6 +161,10 @@
           <classifier>osx-aarch_64</classifier>
           <scope>runtime</scope>
       </dependency>
+    <dependency>
+          <groupId>io.netty</groupId>
+          <artifactId>netty-transport-classes-io_uring</artifactId>
+    </dependency>
       <dependency>
           <groupId>io.netty</groupId>
           <artifactId>netty-transport-native-io_uring</artifactId>
