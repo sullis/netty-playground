@@ -170,13 +170,11 @@
           <artifactId>netty-transport-native-io_uring</artifactId>
           <classifier>linux-x86_64</classifier>
       </dependency>
-    <!-- todo
       <dependency>
           <groupId>io.netty</groupId>
           <artifactId>netty-transport-native-io_uring</artifactId>
           <classifier>linux-aarch_64</classifier>
       </dependency>
-      -->
       <dependency>
           <groupId>io.netty.incubator</groupId>
           <artifactId>netty-incubator-codec-http3</artifactId>
