@@ -30,7 +30,7 @@ public class WebSocketServerTest {
     @BeforeEach
     public void beforeEach() throws Exception {
         server = new WebSocketServer(TestConstants.WEBSOCKET_PATH);
-        server.start();
+        server.start(NettyTransport.NIO);
         defaultUrl = server.getDefaultUrl();
     }
 

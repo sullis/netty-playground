@@ -19,8 +19,9 @@ import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.channel.IoHandlerFactory;
+import io.netty.channel.MultiThreadIoEventLoopGroup;
+import io.netty.channel.socket.ServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslContext;
@@ -38,7 +39,7 @@ public final class WebSocketServer {
 
     public static void main(String[] args) throws Exception {
         WebSocketServer server = new WebSocketServer("/websocket");
-        server.start();
+        server.start(NettyTransport.NIO);
     }
 
     public WebSocketServer(final String webSocketPath) {
@@ -52,21 +53,23 @@ public final class WebSocketServer {
         return "wss://127.0.0.1:" + this.getPort() + this.webSocketPath;
     }
 
-    public void start() throws Exception {
+    public void start(final NettyTransport nettyTransport) throws Exception {
         final SslContext sslCtx = HttpUtil.buildNettySslContext();
 
-        bossGroup = new NioEventLoopGroup();
-        workerGroup = new NioEventLoopGroup();
+        final IoHandlerFactory ioHandlerFactory = nettyTransport.createIoHandlerFactory();
+
+        bossGroup = new MultiThreadIoEventLoopGroup(ioHandlerFactory);
+        workerGroup = new MultiThreadIoEventLoopGroup(ioHandlerFactory);
         ServerBootstrap b = new ServerBootstrap();
         b.option(ChannelOption.SO_BACKLOG, 1024);
         b.group(bossGroup, workerGroup)
-         .channel(NioServerSocketChannel.class)
+         .channel(nettyTransport.getServerSocketChannelClass())
          .handler(new LoggingHandler(NETTYLOG_NAME, LogLevel.INFO))
          .childHandler(new WebSocketServerChannelInitializer(sslCtx, webSocketPath));
 
         Channel ch = b.bind(0).sync().channel();
 
-        InetSocketAddress localAddress = ((NioServerSocketChannel) ch).localAddress();
+        InetSocketAddress localAddress = ((ServerSocketChannel) ch).localAddress();
         this.port = localAddress.getPort();
 
         System.out.println(this.getClass().getSimpleName() + ": " + getDefaultUrl());
