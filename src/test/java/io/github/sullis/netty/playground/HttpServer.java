@@ -19,6 +19,8 @@ import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
+import io.netty.channel.IoHandlerFactory;
+import io.netty.channel.MultiThreadIoEventLoopGroup;
 import io.netty.channel.socket.ServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
@@ -72,9 +74,11 @@ public final class HttpServer {
 
         final SslContext sslCtx = HttpUtil.buildNettySslContext();
 
+        final IoHandlerFactory ioHandlerFactory = this.transport.createIoHandlerFactory();
+
         // Configure the server.
-        bossGroup = this.transport.createEventLoopGroup();
-        workerGroup = this.transport.createEventLoopGroup();
+        bossGroup = new MultiThreadIoEventLoopGroup(ioHandlerFactory);
+        workerGroup = new MultiThreadIoEventLoopGroup(ioHandlerFactory);
         ServerBootstrap b = new ServerBootstrap();
         b.option(ChannelOption.SO_BACKLOG, 1024);
         b.group(bossGroup, workerGroup)
