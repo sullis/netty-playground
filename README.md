@@ -20,4 +20,6 @@ Netty experiments + test suite
 # Articles
 
 - [Netty @ Linkedin](https://www.linkedin.com/blog/engineering/infrastructure/solving-espresso-s-scalability-and-performance-challenges-to-sup)
+- [Flink SSL performance: netty-tcnative-boringssl](https://www.ververica.com/blog/how-openssl-in-ververica-platform-improves-your-flink-job-performance)
+
   
