@@ -22,7 +22,7 @@
     <slf4j.version>2.0.16</slf4j.version>
     <bouncycastle.version>1.78.1</bouncycastle.version>
     <brotli4j.version>1.17.0</brotli4j.version>
-    <netty.version>4.2.0.Alpha3</netty.version>
+    <netty.version>4.2.0.Alpha4</netty.version>
     <skip.tests>false</skip.tests>
   </properties>
 
@@ -111,6 +111,10 @@
           <groupId>io.netty</groupId>
           <artifactId>netty-transport-native-epoll</artifactId>
           <classifier>linux-x86_64</classifier>
+      </dependency>
+      <dependency>
+          <groupId>io.netty</groupId>
+          <artifactId>netty-codec-compression</artifactId>
       </dependency>
       <dependency>
           <groupId>io.netty</groupId>
