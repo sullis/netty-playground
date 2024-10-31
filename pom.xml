@@ -20,7 +20,7 @@
     <stacksrc.version>0.6.0</stacksrc.version>
     <logback.version>1.5.12</logback.version>
     <slf4j.version>2.0.16</slf4j.version>
-    <bouncycastle.version>1.78.1</bouncycastle.version>
+    <bouncycastle.version>1.79</bouncycastle.version>
     <brotli4j.version>1.17.0</brotli4j.version>
     <netty.version>4.2.0.Alpha5</netty.version>
     <skip.tests>false</skip.tests>
