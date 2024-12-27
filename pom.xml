@@ -26,11 +26,13 @@
   </properties>
 
   <repositories>
+   <!--
    <repository>
      <id>netty-snapshots</id>
      <name>netty-snapshots</name>
      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
    </repository>
+   -->
   </repositories>
 
     <profiles>
