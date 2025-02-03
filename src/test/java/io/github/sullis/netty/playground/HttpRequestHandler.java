@@ -16,9 +16,11 @@
 package io.github.sullis.netty.playground;
 
 import io.netty.buffer.Unpooled;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.FullHttpResponse;
@@ -51,12 +53,13 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<HttpObject> 
     @Override
     public void channelRead0(ChannelHandlerContext ctx, HttpObject msg) {
         if (msg instanceof HttpRequest) {
+            Channel ch = ctx.channel();
             HttpRequest req = (HttpRequest) msg;
             LOGGER.info("channelRead0 HttpRequest: {} {}", req.method().name(), msg.getClass().getName());
 
             boolean keepAlive = HttpUtil.isKeepAlive(req);
 
-            LOGGER.info("channelRead0: keepAlive=" + keepAlive);
+            LOGGER.info("channelRead0: keepAlive={}, ch.isAutoRead={}", keepAlive, ch.getOption(ChannelOption.AUTO_READ));
 
             FullHttpResponse response = new DefaultFullHttpResponse(req.protocolVersion(), OK,
                                                                     Unpooled.wrappedBuffer(RESPONSE_CONTENT));
