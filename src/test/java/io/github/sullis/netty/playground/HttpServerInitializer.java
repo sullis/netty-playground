@@ -46,9 +46,8 @@ public class HttpServerInitializer extends ChannelInitializer<SocketChannel> {
         LOG.info("initChannel: " + ch.getClass().getName());
         if (ch instanceof NioSocketChannel) {
             NioSocketChannel nioSocketChannel = (NioSocketChannel) ch;
-            LOG.info("SocketChannel: {} isKeepAlive {} autoRead {}",
+            LOG.info("SocketChannel: {} autoRead={}",
                     nioSocketChannel.getClass().getSimpleName(),
-                    nioSocketChannel.config().isKeepAlive(),
                     nioSocketChannel.config().isAutoRead());
         }
         ChannelPipeline p = ch.pipeline();

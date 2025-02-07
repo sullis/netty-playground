@@ -59,7 +59,7 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<HttpObject> 
 
             boolean keepAlive = HttpUtil.isKeepAlive(req);
 
-            LOGGER.info("channelRead0: keepAlive={}, ch.isAutoRead={}", keepAlive, ch.getOption(ChannelOption.AUTO_READ));
+            LOGGER.info("channelRead0: ch.isAutoRead={}", ch.getOption(ChannelOption.AUTO_READ));
 
             FullHttpResponse response = new DefaultFullHttpResponse(req.protocolVersion(), OK,
                                                                     Unpooled.wrappedBuffer(RESPONSE_CONTENT));
