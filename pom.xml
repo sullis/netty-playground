@@ -22,7 +22,7 @@
     <slf4j.version>2.0.16</slf4j.version>
     <bouncycastle.version>1.80</bouncycastle.version>
     <brotli4j.version>1.18.0</brotli4j.version>
-    <netty.version>4.2.0.RC2</netty.version>
+    <netty.version>4.2.0.RC3</netty.version>
     <skip.tests>false</skip.tests>
   </properties>
 
