@@ -9,6 +9,7 @@
   <name>netty-playground</name>
   <version>0.0.1-SNAPSHOT</version>
   <description>netty-playground</description>
+
   <licenses>
     <license>
       <name>Apache License 2.0</name>
