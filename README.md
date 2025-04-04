@@ -20,7 +20,6 @@ Netty experiments + test suite
 - 2014: [Why Netty?](http://normanmaurer.me/presentations/2014-netflix-netty/slides.html) - Norman Maurer
 
 # Articles
-
 - [Netty @ Linkedin](https://www.linkedin.com/blog/engineering/infrastructure/solving-espresso-s-scalability-and-performance-challenges-to-sup)
 - [Flink SSL performance: netty-tcnative-boringssl](https://www.ververica.com/blog/how-openssl-in-ververica-platform-improves-your-flink-job-performance)
 
