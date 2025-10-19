@@ -108,6 +108,12 @@
     </dependency>
     <dependency>
       <groupId>io.netty</groupId>
+      <artifactId>netty-testsuite</artifactId>
+      <scope>test</scope>
+      <version>${netty.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.netty</groupId>
       <artifactId>netty-tcnative-classes</artifactId>
     </dependency>
     <dependency>
