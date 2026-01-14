@@ -8,6 +8,7 @@ Netty experiments + test suite
 - 2025: [Netty](https://speakerdeck.com/sullis/netty-portland-java-user-group-2025-02-18) - Sean Sullivan @ Portland Java User Group
 - 2024: [Netty](https://speakerdeck.com/sullis/netty-montreal-java-user-group-2024-05-21) - Sean Sullivan @ Montreal Java User Group
 - 2024: [Netty](https://speakerdeck.com/sullis/netty-chicago-java-user-group-2024-04-17) - Sean Sullivan @ Chicago Java Users Group
+- 2024: [Netty and Websockets - Devoxx Poland](https://www.youtube.com/watch?v=B1kTDSx78TA) - Arkadiusz Migala
 - 2024: [Netty - Devoxx France](https://www.youtube.com/watch?v=CLsDEh61r1o) - Stéphane Landelle
 - 2023: [Netty - Devoxx Belgium](https://www.youtube.com/watch?v=NvnOg6g4114) - Stéphane Landelle
 - 2019: [Netty 5 Lessons Learned - Scale by the Bay](https://www.youtube.com/watch?v=hvYqSz_BgUM) - Norman Maurer
