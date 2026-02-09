@@ -78,7 +78,7 @@ public class HttpServerTest {
         SSLContext sslContext = SSLContextBuilder.create().loadTrustMaterial(TrustAllStrategy.INSTANCE).build();
         SSLConnectionSocketFactory socketFactory = SSLConnectionSocketFactoryBuilder.create().setHostnameVerifier(NoopHostnameVerifier.INSTANCE).setSslContext(sslContext).build();
         HttpClientConnectionManager connManager = PoolingHttpClientConnectionManagerBuilder.create().setSSLSocketFactory(socketFactory).build();
-        CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(connManager).build();
+        CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(connManager).disableContentCompression().build();
         HttpGet httpGet = new HttpGet(this.server.getDefaultUrl());
         httpGet.setHeader("Accept-Encoding", "zstd");
         CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
@@ -102,7 +102,7 @@ public class HttpServerTest {
         SSLContext sslContext = SSLContextBuilder.create().loadTrustMaterial(TrustAllStrategy.INSTANCE).build();
         SSLConnectionSocketFactory socketFactory = SSLConnectionSocketFactoryBuilder.create().setHostnameVerifier(NoopHostnameVerifier.INSTANCE).setSslContext(sslContext).build();
         HttpClientConnectionManager connManager = PoolingHttpClientConnectionManagerBuilder.create().setSSLSocketFactory(socketFactory).build();
-        CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(connManager).build();
+        CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(connManager).disableContentCompression().build();
         HttpGet httpGet = new HttpGet(this.server.getDefaultUrl());
         httpGet.setHeader("Accept-Encoding", "br");
         CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
