@@ -38,7 +38,6 @@ public class WebSocketServerChannelInitializer extends ChannelInitializer<Socket
 
     @Override
     public void initChannel(final SocketChannel ch) throws Exception {
-        System.out.println("initChannel called. webSocketPath: " + this.webSocketPath);
         ChannelPipeline pipeline = ch.pipeline();
         if (sslCtx != null) {
             pipeline.addLast(sslCtx.newHandler(ch.alloc()));

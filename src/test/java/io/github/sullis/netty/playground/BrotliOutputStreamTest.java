@@ -32,9 +32,6 @@ public class BrotliOutputStreamTest {
         out.flush();
         out.close();
         byte[] compressed = baos.toByteArray();
-        System.out.println("inputText: " + inputText);
-        System.out.println("compressed length: " + compressed.length);
-        System.out.println("compressed: " + Arrays.toString(compressed));
         final ByteArrayInputStream bais = new ByteArrayInputStream(compressed);
         BrotliInputStream brotliInputStream = new BrotliInputStream(bais);
         String result = new String(brotliInputStream.readAllBytes(), charset);
@@ -51,8 +48,6 @@ public class BrotliOutputStreamTest {
         out.flush();
         out.close();
         byte[] compressed = baos.toByteArray();
-        System.out.println("empty inputText compressed length: " + compressed.length);
-        System.out.println("empty inputText compressed: " + Arrays.toString(compressed));
         final ByteArrayInputStream bais = new ByteArrayInputStream(compressed);
         BrotliInputStream brotliInputStream = new BrotliInputStream(bais);
         String result = new String(brotliInputStream.readAllBytes(), charset);
@@ -69,8 +64,6 @@ public class BrotliOutputStreamTest {
         out.flush();
         out.close();
         byte[] compressed = baos.toByteArray();
-        System.out.println("large inputText length: " + inputText.length());
-        System.out.println("large inputText compressed length: " + compressed.length);
         final ByteArrayInputStream bais = new ByteArrayInputStream(compressed);
         BrotliInputStream brotliInputStream = new BrotliInputStream(bais);
         String result = new String(brotliInputStream.readAllBytes(), charset);
@@ -97,7 +90,6 @@ public class BrotliOutputStreamTest {
         out.close();
         
         byte[] compressed = baos.toByteArray();
-        System.out.println("multiple writes compressed length: " + compressed.length);
         final ByteArrayInputStream bais = new ByteArrayInputStream(compressed);
         BrotliInputStream brotliInputStream = new BrotliInputStream(bais);
         String result = new String(brotliInputStream.readAllBytes(), charset);

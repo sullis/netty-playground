@@ -32,9 +32,6 @@ public class BrotliInputStreamTest {
         final var charset = TestConstants.CHARSET;
         final String inputText = TestConstants.CONTENT;
         byte[] compressed = Encoder.compress(inputText.getBytes(), StandardCompressionOptions.brotli().parameters());
-        System.out.println("inputText: " + inputText);
-        System.out.println("compressed length: " + compressed.length);
-        System.out.println("compressed: " + Arrays.toString(compressed));
         final ByteArrayInputStream bais = new ByteArrayInputStream(compressed);
         BrotliInputStream brotliInputStream = new BrotliInputStream(bais);
         String result = new String(brotliInputStream.readAllBytes(), charset);
@@ -46,8 +43,6 @@ public class BrotliInputStreamTest {
         final var charset = TestConstants.CHARSET;
         final String inputText = "";
         byte[] compressed = Encoder.compress(inputText.getBytes(), StandardCompressionOptions.brotli().parameters());
-        System.out.println("empty inputText compressed length: " + compressed.length);
-        System.out.println("empty inputText compressed: " + Arrays.toString(compressed));
         final ByteArrayInputStream bais = new ByteArrayInputStream(compressed);
         BrotliInputStream brotliInputStream = new BrotliInputStream(bais);
         String result = new String(brotliInputStream.readAllBytes(), charset);
@@ -59,8 +54,6 @@ public class BrotliInputStreamTest {
         final var charset = TestConstants.CHARSET;
         final String inputText = TestConstants.CONTENT.repeat(1000);
         byte[] compressed = Encoder.compress(inputText.getBytes(), StandardCompressionOptions.brotli().parameters());
-        System.out.println("large inputText length: " + inputText.length());
-        System.out.println("large inputText compressed length: " + compressed.length);
         final ByteArrayInputStream bais = new ByteArrayInputStream(compressed);
         BrotliInputStream brotliInputStream = new BrotliInputStream(bais);
         String result = new String(brotliInputStream.readAllBytes(), charset);

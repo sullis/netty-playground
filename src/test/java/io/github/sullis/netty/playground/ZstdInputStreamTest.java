@@ -23,9 +23,6 @@ public class ZstdInputStreamTest {
         final var charset = TestConstants.CHARSET;
         final String inputText = TestConstants.CONTENT;
         byte[] compressed = com.github.luben.zstd.Zstd.compress(inputText.getBytes());
-        System.out.println("inputText: " + inputText);
-        System.out.println("compressed length: " + compressed.length);
-        System.out.println("compressed: " + Arrays.toString(compressed));
         final ByteArrayInputStream bais = new ByteArrayInputStream(compressed);
         ZstdInputStream zstdInputStream = new ZstdInputStream(bais);
         String result = new String(zstdInputStream.readAllBytes(), charset);
