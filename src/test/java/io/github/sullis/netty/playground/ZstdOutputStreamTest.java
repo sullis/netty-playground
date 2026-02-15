@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,7 +26,7 @@ public class ZstdOutputStreamTest {
         final String inputText = TestConstants.CONTENT;
         ByteArrayOutputStream baos = new ByteArrayOutputStream(inputText.length());
         ZstdOutputStream out = new ZstdOutputStream(baos);
-        out.write(inputText.getBytes(StandardCharsets.UTF_8));
+        out.write(inputText.getBytes(charset));
         out.flush();
         out.close();
         byte[] compressed = baos.toByteArray();
