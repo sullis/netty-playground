@@ -199,13 +199,12 @@ public class WebSocketServerTest {
                     }
                 });
         
-        // Note: The WebSocketFrameHandler currently only supports TextWebSocketFrame,
-        // so this test will fail until binary frame support is added.
-        // This test documents the expected behavior for binary frames.
+        // Note: The WebSocketFrameHandler currently only supports TextWebSocketFrame.
+        // This test verifies the current behavior where binary frames are not supported.
+        // The test passes by confirming that no binary data is received.
         WebSocket webSocket = webSocketFuture.join();
-        // We expect an error here since binary frames are not yet supported
         await().pollDelay(Duration.ofMillis(500)).atMost(Duration.ofSeconds(2))
-               .until(() -> !onBinaryCalled.get()); // Binary not supported yet
+               .until(() -> !onBinaryCalled.get()); // Verify binary frames are not yet supported
     }
 
     @Test
@@ -240,7 +239,6 @@ public class WebSocketServerTest {
             
             WebSocket webSocket = webSocketFuture.join();
             await().untilTrue(onTextCalled);
-            assertThat(onTextCalled).isTrue();
         } finally {
             epollServer.stop();
         }
@@ -278,7 +276,6 @@ public class WebSocketServerTest {
             
             WebSocket webSocket = webSocketFuture.join();
             await().untilTrue(onTextCalled);
-            assertThat(onTextCalled).isTrue();
         } finally {
             ioUringServer.stop();
         }
