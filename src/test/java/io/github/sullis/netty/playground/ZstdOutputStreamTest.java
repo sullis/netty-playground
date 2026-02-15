@@ -30,9 +30,6 @@ public class ZstdOutputStreamTest {
         out.flush();
         out.close();
         byte[] compressed = baos.toByteArray();
-        System.out.println("inputText: " + inputText);
-        System.out.println("compressed length: " + compressed.length);
-        System.out.println("compressed: " + Arrays.toString(compressed));
         final ByteArrayInputStream bais = new ByteArrayInputStream(compressed);
         ZstdInputStream zstdInputStream = new ZstdInputStream(bais);
         String result = new String(zstdInputStream.readAllBytes(), charset);

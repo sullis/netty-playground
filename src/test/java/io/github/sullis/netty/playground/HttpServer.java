@@ -91,8 +91,6 @@ public final class HttpServer {
         InetSocketAddress localAddress = ((ServerSocketChannel) ch).localAddress();
         this.port = localAddress.getPort();
 
-        System.out.println("HttpServer: " + this.transport + " " + this.getDefaultUrl());
-
         // ch.closeFuture().sync();
     }
 

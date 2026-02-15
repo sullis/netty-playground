@@ -72,8 +72,6 @@ public final class WebSocketServer {
         InetSocketAddress localAddress = ((ServerSocketChannel) ch).localAddress();
         this.port = localAddress.getPort();
 
-        System.out.println(this.getClass().getSimpleName() + ": " + getDefaultUrl());
-
         // ch.closeFuture().sync();
     }
 

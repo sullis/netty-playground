@@ -46,8 +46,6 @@ public class HttpServerTest {
     static public void beforeAll() throws Exception {
         String osName = System.getProperty("os.name");
         String archName = System.getProperty("os.arch");
-        System.out.println("os.name: " + osName);
-        System.out.println("os.arch: " + archName);
     }
 
     @BeforeEach
@@ -86,8 +84,6 @@ public class HttpServerTest {
         HttpEntity responseEntity = httpResponse.getEntity();
         assertEquals("text/plain", responseEntity.getContentType());
         byte[] compressedData = EntityUtils.toByteArray(responseEntity);
-        System.out.println("HTTP response compressedData length: " + compressedData.length);
-        System.out.println("HTTP response compressedData: " + Arrays.toString(compressedData));
         byte[] decompressedData = com.github.luben.zstd.Zstd.decompress(compressedData, 50_000);
         assertNotNull(decompressedData, "decompressedData");
         String text = new String(decompressedData, TestConstants.CHARSET);
@@ -120,8 +116,6 @@ public class HttpServerTest {
         assertEquals("zstd", httpResponse.headers().firstValue("content-encoding").get());
         assertEquals("text/plain", httpResponse.headers().firstValue("content-type").get());
         byte[] compressedData = httpResponse.body();
-        System.out.println("HTTP response compressedData length: " + compressedData.length);
-        System.out.println("HTTP response compressedData: " + Arrays.toString(compressedData));
         byte[] decompressedData = com.github.luben.zstd.Zstd.decompress(compressedData, 50_000);
         assertNotNull(decompressedData, "decompressedData");
         String text = new String(decompressedData, TestConstants.CHARSET);
@@ -144,10 +138,7 @@ public class HttpServerTest {
         HttpEntity responseEntity = httpResponse.getEntity();
         assertEquals("text/plain", responseEntity.getContentType());
         byte[] compressedData = EntityUtils.toByteArray(responseEntity);
-        System.out.println("HTTP response compressedData length: " + compressedData.length);
-        System.out.println("HTTP response compressedData: " + Arrays.toString(compressedData));
         DirectDecompress directDecompress = DirectDecompress.decompress(compressedData);
-        System.out.println("DirectDecompress result status: " + directDecompress.getResultStatus());
         byte[] decompressedData = directDecompress.getDecompressedData();
         assertNotNull(decompressedData, "decompressedData");
         String text = new String(decompressedData, TestConstants.CHARSET);
@@ -180,10 +171,7 @@ public class HttpServerTest {
         assertEquals("br", httpResponse.headers().firstValue("content-encoding").get());
         assertEquals("text/plain", httpResponse.headers().firstValue("content-type").get());
         byte[] compressedData = httpResponse.body();
-        System.out.println("HTTP response compressedData length: " + compressedData.length);
-        System.out.println("HTTP response compressedData: " + Arrays.toString(compressedData));
         DirectDecompress directDecompress = DirectDecompress.decompress(compressedData);
-        System.out.println("DirectDecompress result status: " + directDecompress.getResultStatus());
         byte[] decompressedData = directDecompress.getDecompressedData();
         assertNotNull(decompressedData, "decompressedData");
         String text = new String(decompressedData, TestConstants.CHARSET);
