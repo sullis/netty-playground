@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BrotliOutputStreamTest {
     @BeforeAll
@@ -27,7 +28,7 @@ public class BrotliOutputStreamTest {
         final String inputText = TestConstants.CONTENT;
         ByteArrayOutputStream baos = new ByteArrayOutputStream(inputText.length());
         BrotliOutputStream out = new BrotliOutputStream(baos, StandardCompressionOptions.brotli().parameters());
-        out.write(inputText.getBytes(StandardCharsets.UTF_8));
+        out.write(inputText.getBytes(charset));
         out.flush();
         out.close();
         byte[] compressed = baos.toByteArray();
@@ -38,5 +39,68 @@ public class BrotliOutputStreamTest {
         BrotliInputStream brotliInputStream = new BrotliInputStream(bais);
         String result = new String(brotliInputStream.readAllBytes(), charset);
         assertEquals(inputText, result);
+    }
+
+    @Test
+    public void brotliOutputStreamEmptyInput() throws Exception {
+        final var charset = TestConstants.CHARSET;
+        final String inputText = "";
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        BrotliOutputStream out = new BrotliOutputStream(baos, StandardCompressionOptions.brotli().parameters());
+        out.write(inputText.getBytes(charset));
+        out.flush();
+        out.close();
+        byte[] compressed = baos.toByteArray();
+        System.out.println("empty inputText compressed length: " + compressed.length);
+        System.out.println("empty inputText compressed: " + Arrays.toString(compressed));
+        final ByteArrayInputStream bais = new ByteArrayInputStream(compressed);
+        BrotliInputStream brotliInputStream = new BrotliInputStream(bais);
+        String result = new String(brotliInputStream.readAllBytes(), charset);
+        assertEquals(inputText, result);
+    }
+
+    @Test
+    public void brotliOutputStreamLargeInput() throws Exception {
+        final var charset = TestConstants.CHARSET;
+        final String inputText = TestConstants.CONTENT.repeat(1000);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(inputText.length());
+        BrotliOutputStream out = new BrotliOutputStream(baos, StandardCompressionOptions.brotli().parameters());
+        out.write(inputText.getBytes(charset));
+        out.flush();
+        out.close();
+        byte[] compressed = baos.toByteArray();
+        System.out.println("large inputText length: " + inputText.length());
+        System.out.println("large inputText compressed length: " + compressed.length);
+        final ByteArrayInputStream bais = new ByteArrayInputStream(compressed);
+        BrotliInputStream brotliInputStream = new BrotliInputStream(bais);
+        String result = new String(brotliInputStream.readAllBytes(), charset);
+        assertEquals(inputText, result);
+        assertTrue(compressed.length < inputText.length(), "Compressed data should be smaller than original");
+    }
+
+    @Test
+    public void brotliOutputStreamMultipleWrites() throws Exception {
+        final var charset = TestConstants.CHARSET;
+        final String part1 = "Hello ";
+        final String part2 = "World ";
+        final String part3 = "from Brotli!";
+        final String expectedText = part1 + part2 + part3;
+        
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        BrotliOutputStream out = new BrotliOutputStream(baos, StandardCompressionOptions.brotli().parameters());
+        out.write(part1.getBytes(charset));
+        out.flush();
+        out.write(part2.getBytes(charset));
+        out.flush();
+        out.write(part3.getBytes(charset));
+        out.flush();
+        out.close();
+        
+        byte[] compressed = baos.toByteArray();
+        System.out.println("multiple writes compressed length: " + compressed.length);
+        final ByteArrayInputStream bais = new ByteArrayInputStream(compressed);
+        BrotliInputStream brotliInputStream = new BrotliInputStream(bais);
+        String result = new String(brotliInputStream.readAllBytes(), charset);
+        assertEquals(expectedText, result);
     }
 }
