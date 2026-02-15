@@ -96,6 +96,40 @@ public class HttpServerTest {
 
     @ParameterizedTest
     @MethodSource("availableNettyTransports")
+    public void zstdWithJdkHttpClient_http1(NettyTransport transport) throws Exception {
+        verifyZstdWithJdkHttpClient(HttpClient.Version.HTTP_1_1, transport);
+    }
+
+    @ParameterizedTest
+    @MethodSource("availableNettyTransports")
+    public void zstdWithJdkHttpClient_http2(NettyTransport transport) throws Exception {
+        verifyZstdWithJdkHttpClient(HttpClient.Version.HTTP_2, transport);
+    }
+
+    private void verifyZstdWithJdkHttpClient(final HttpClient.Version httpVersion, NettyTransport transport) throws Exception {
+        this.server = new HttpServer(transport);
+        this.server.start();
+        HttpClient client = HttpUtil.createJdkHttpClient(httpVersion);
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(this.server.getDefaultUrl()))
+                .setHeader("Accept-Encoding", "zstd")
+                .timeout(Duration.ofSeconds(1))
+                .build();
+        HttpResponse<byte[]> httpResponse = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
+        assertEquals(200, httpResponse.statusCode());
+        assertEquals("zstd", httpResponse.headers().firstValue("content-encoding").get());
+        assertEquals("text/plain", httpResponse.headers().firstValue("content-type").get());
+        byte[] compressedData = httpResponse.body();
+        System.out.println("HTTP response compressedData length: " + compressedData.length);
+        System.out.println("HTTP response compressedData: " + Arrays.toString(compressedData));
+        byte[] decompressedData = com.github.luben.zstd.Zstd.decompress(compressedData, 50_000);
+        assertNotNull(decompressedData, "decompressedData");
+        String text = new String(decompressedData, TestConstants.CHARSET);
+        assertEquals(TestConstants.CONTENT, text);
+    }
+
+    @ParameterizedTest
+    @MethodSource("availableNettyTransports")
     public void brotliWithApacheHttpClient(NettyTransport transport) throws Exception {
         this.server = new HttpServer(transport);
         this.server.start();
