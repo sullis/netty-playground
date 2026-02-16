@@ -10,7 +10,7 @@ Netty experiments + test suite
 - 2024: [Netty](https://speakerdeck.com/sullis/netty-chicago-java-user-group-2024-04-17) - Sean Sullivan @ Chicago Java Users Group
 - 2024: [Netty and Websockets - Devoxx Poland](https://www.youtube.com/watch?v=B1kTDSx78TA) - Arkadiusz Migala
 - 2024: [Netty - Devoxx France](https://www.youtube.com/watch?v=CLsDEh61r1o) - Stéphane Landelle
-- 2023: [Netty - Devoxx Belgium](https://www.youtube.com/watch?v=NvnOg6g4114) - Stéphane Landelle
+- 2022: [Netty - Devoxx Belgium](https://www.youtube.com/watch?v=NvnOg6g4114) - Stéphane Landelle
 - 2019: [Netty 5 Lessons Learned - Scale by the Bay](https://www.youtube.com/watch?v=hvYqSz_BgUM) - Norman Maurer
 - 2018: [Netty internals](https://speakerdeck.com/normanmaurer/netty-internals-optimizations-everywhere) - Norman Maurer
 - 2018: [Boosting Apache Cassandra's performance using Netty](https://www.youtube.com/watch?v=ZXytCqujbwE) - Dinesh Joshi
