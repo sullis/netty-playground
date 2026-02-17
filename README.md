@@ -21,7 +21,21 @@ Netty experiments + test suite
 - 2014: [Why Netty?](http://normanmaurer.me/presentations/2014-netflix-netty/slides.html) - Norman Maurer
 
 # Articles
-- [Netty @ Linkedin](https://www.linkedin.com/blog/engineering/infrastructure/solving-espresso-s-scalability-and-performance-challenges-to-sup)
+
+## Tutorials and Guides
+- [Introduction to Netty - Baeldung](https://www.baeldung.com/netty)
+- [Java Netty: A Comprehensive Guide - JavaSpring](https://www.javaspring.net/blog/java-netty/)
+- [Building Real-Time Communication Systems with Netty: A Step-by-Step Guide](https://the-pi-guy.com/blog/building_realtime_communication_systems_with_netty_a_stepbystep_guide/)
+- [Netty Tutorial - SO Documentation](https://so.parthpatel.net/netty/)
+
+## Company Engineering Blogs
+- [Netty @ LinkedIn](https://www.linkedin.com/blog/engineering/infrastructure/solving-espresso-s-scalability-and-performance-challenges-to-sup)
 - [Flink SSL performance: netty-tcnative-boringssl](https://www.ververica.com/blog/how-openssl-in-ververica-platform-improves-your-flink-job-performance)
+
+## Performance and Best Practices
+- [Building a Performant Application Using Netty - DZone](https://dzone.com/articles/building-a-performant-application-using-netty)
+- [Learn Java & Netty Performance Tuning with the HTTP/2 Protocol - Alibaba Cloud](https://www.alibabacloud.com/blog/learn-java-%26-netty-performance-tuning-with-the-http2-protocol-case-tools-tips-and-methodology_600312)
+- [Netty 4 Optimisation - Sheldon Ip](https://sheldonip.github.io/posts/netty-4-optimisation/)
+- [Maximizing Performance with Netty and Reactive Programming in Java](https://objectcomputing.com/how-we-share/articles/2024/06/27/maximizing-performance-netty-and-reactive-programming-java)
 
   
