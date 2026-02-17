@@ -34,7 +34,7 @@ Netty experiments + test suite
 
 ## Performance and Best Practices
 - [Building a Performant Application Using Netty - DZone](https://dzone.com/articles/building-a-performant-application-using-netty)
-- [Learn Java & Netty Performance Tuning with the HTTP/2 Protocol - Alibaba Cloud](https://www.alibabacloud.com/blog/learn-java-%26-netty-performance-tuning-with-the-http2-protocol-case-tools-tips-and-methodology_600312)
+- [Learn Java and Netty Performance Tuning with the HTTP/2 Protocol - Alibaba Cloud](https://www.alibabacloud.com/blog/learn-java-%26-netty-performance-tuning-with-the-http2-protocol-case-tools-tips-and-methodology_600312)
 - [Netty 4 Optimisation - Sheldon Ip](https://sheldonip.github.io/posts/netty-4-optimisation/)
 - [Maximizing Performance with Netty and Reactive Programming in Java](https://objectcomputing.com/how-we-share/articles/2024/06/27/maximizing-performance-netty-and-reactive-programming-java)
 
