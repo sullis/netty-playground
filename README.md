@@ -24,7 +24,7 @@ Netty experiments + test suite
 
 ## Tutorials and Guides
 - [Introduction to Netty - Baeldung](https://www.baeldung.com/netty)
-- [Java Netty: A Comprehensive Guide - JavaSpring](https://www.javaspring.net/blog/java-netty/)
+- [Java Netty: A Comprehensive Guide - Java Spring](https://www.javaspring.net/blog/java-netty/)
 - [Building Real-Time Communication Systems with Netty: A Step-by-Step Guide](https://the-pi-guy.com/blog/building_realtime_communication_systems_with_netty_a_stepbystep_guide/)
 - [Netty Tutorial - SO Documentation](https://so.parthpatel.net/netty/)
 
