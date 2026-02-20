@@ -22,6 +22,7 @@ public class IoUringTest {
     @EnabledOnOs(value = OS.LINUX)
     public void ioUringIsAvailableOnLinux() {
         final Throwable cause = IoUring.unavailabilityCause();
+        assertThat(cause).isNull();
         assertThat(IoUring.isAvailable()).isTrue();
     }
 }

@@ -31,8 +31,10 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.io.ByteArrayInputStream;
 import java.util.Arrays;
 import java.util.stream.Stream;
+import java.util.zip.GZIPInputStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -175,6 +177,46 @@ public class HttpServerTest {
         byte[] decompressedData = directDecompress.getDecompressedData();
         assertNotNull(decompressedData, "decompressedData");
         String text = new String(decompressedData, TestConstants.CHARSET);
+        assertEquals(TestConstants.CONTENT, text);
+    }
+
+    @ParameterizedTest
+    @MethodSource("availableNettyTransports")
+    public void gzipWithApacheHttpClient(NettyTransport transport) throws Exception {
+        this.server = new HttpServer(transport);
+        this.server.start();
+        SSLContext sslContext = SSLContextBuilder.create().loadTrustMaterial(TrustAllStrategy.INSTANCE).build();
+        SSLConnectionSocketFactory socketFactory = SSLConnectionSocketFactoryBuilder.create().setHostnameVerifier(NoopHostnameVerifier.INSTANCE).setSslContext(sslContext).build();
+        HttpClientConnectionManager connManager = PoolingHttpClientConnectionManagerBuilder.create().setSSLSocketFactory(socketFactory).build();
+        CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(connManager).disableContentCompression().build();
+        HttpGet httpGet = new HttpGet(this.server.getDefaultUrl());
+        httpGet.setHeader("Accept-Encoding", "gzip");
+        CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
+        assertEquals("gzip", httpResponse.getFirstHeader("content-encoding").getValue());
+        HttpEntity responseEntity = httpResponse.getEntity();
+        assertEquals("text/plain", responseEntity.getContentType());
+        byte[] compressedData = EntityUtils.toByteArray(responseEntity);
+        GZIPInputStream gzipInputStream = new GZIPInputStream(new ByteArrayInputStream(compressedData));
+        String text = new String(gzipInputStream.readAllBytes(), TestConstants.CHARSET);
+        assertEquals(TestConstants.CONTENT, text);
+    }
+
+    @ParameterizedTest
+    @MethodSource("availableNettyTransports")
+    public void noEncodingWithApacheHttpClient(NettyTransport transport) throws Exception {
+        this.server = new HttpServer(transport);
+        this.server.start();
+        SSLContext sslContext = SSLContextBuilder.create().loadTrustMaterial(TrustAllStrategy.INSTANCE).build();
+        SSLConnectionSocketFactory socketFactory = SSLConnectionSocketFactoryBuilder.create().setHostnameVerifier(NoopHostnameVerifier.INSTANCE).setSslContext(sslContext).build();
+        HttpClientConnectionManager connManager = PoolingHttpClientConnectionManagerBuilder.create().setSSLSocketFactory(socketFactory).build();
+        CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(connManager).disableContentCompression().build();
+        HttpGet httpGet = new HttpGet(this.server.getDefaultUrl());
+        CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
+        assertEquals(200, httpResponse.getCode());
+        assertNotNull(httpResponse.getFirstHeader("content-type"));
+        HttpEntity responseEntity = httpResponse.getEntity();
+        assertEquals("text/plain", responseEntity.getContentType());
+        String text = EntityUtils.toString(responseEntity, TestConstants.CHARSET);
         assertEquals(TestConstants.CONTENT, text);
     }
 

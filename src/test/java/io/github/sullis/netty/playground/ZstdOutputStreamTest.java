@@ -35,4 +35,60 @@ public class ZstdOutputStreamTest {
         String result = new String(zstdInputStream.readAllBytes(), charset);
         assertEquals(inputText, result);
     }
+
+    @Test
+    public void zstdOutputStreamEmptyInput() throws Exception {
+        final var charset = TestConstants.CHARSET;
+        final String inputText = "";
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ZstdOutputStream out = new ZstdOutputStream(baos);
+        out.write(inputText.getBytes(charset));
+        out.flush();
+        out.close();
+        byte[] compressed = baos.toByteArray();
+        final ByteArrayInputStream bais = new ByteArrayInputStream(compressed);
+        ZstdInputStream zstdInputStream = new ZstdInputStream(bais);
+        String result = new String(zstdInputStream.readAllBytes(), charset);
+        assertEquals(inputText, result);
+    }
+
+    @Test
+    public void zstdOutputStreamLargeInput() throws Exception {
+        final var charset = TestConstants.CHARSET;
+        final String inputText = TestConstants.CONTENT.repeat(1000);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(inputText.length());
+        ZstdOutputStream out = new ZstdOutputStream(baos);
+        out.write(inputText.getBytes(charset));
+        out.flush();
+        out.close();
+        byte[] compressed = baos.toByteArray();
+        final ByteArrayInputStream bais = new ByteArrayInputStream(compressed);
+        ZstdInputStream zstdInputStream = new ZstdInputStream(bais);
+        String result = new String(zstdInputStream.readAllBytes(), charset);
+        assertEquals(inputText, result);
+        assertTrue(compressed.length < inputText.length(), "Compressed data should be smaller than original");
+    }
+
+    @Test
+    public void zstdOutputStreamMultipleWrites() throws Exception {
+        final var charset = TestConstants.CHARSET;
+        final String part1 = "Hello ";
+        final String part2 = "World ";
+        final String part3 = "from Zstd!";
+        final String expectedText = part1 + part2 + part3;
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ZstdOutputStream out = new ZstdOutputStream(baos);
+        out.write(part1.getBytes(charset));
+        out.write(part2.getBytes(charset));
+        out.write(part3.getBytes(charset));
+        out.flush();
+        out.close();
+
+        byte[] compressed = baos.toByteArray();
+        final ByteArrayInputStream bais = new ByteArrayInputStream(compressed);
+        ZstdInputStream zstdInputStream = new ZstdInputStream(bais);
+        String result = new String(zstdInputStream.readAllBytes(), charset);
+        assertEquals(expectedText, result);
+    }
 }
