@@ -7,11 +7,11 @@ import com.aayushatharva.brotli4j.encoder.Encoder;
 import io.netty.handler.codec.compression.StandardCompressionOptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -94,5 +94,22 @@ public class BrotliOutputStreamTest {
         BrotliInputStream brotliInputStream = new BrotliInputStream(bais);
         String result = new String(brotliInputStream.readAllBytes(), charset);
         assertEquals(expectedText, result);
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {0, 4, 6, 9, 11})
+    public void brotliOutputStreamVariousQualityLevels(int quality) throws Exception {
+        final var charset = TestConstants.CHARSET;
+        final String inputText = TestConstants.CONTENT;
+        Encoder.Parameters params = new Encoder.Parameters().setQuality(quality);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(inputText.length());
+        try (BrotliOutputStream out = new BrotliOutputStream(baos, params)) {
+            out.write(inputText.getBytes(charset));
+        }
+        byte[] compressed = baos.toByteArray();
+        try (BrotliInputStream brotliInputStream = new BrotliInputStream(new ByteArrayInputStream(compressed))) {
+            String result = new String(brotliInputStream.readAllBytes(), charset);
+            assertEquals(inputText, result);
+        }
     }
 }
