@@ -12,8 +12,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -105,14 +103,13 @@ public class BrotliOutputStreamTest {
         final String inputText = TestConstants.CONTENT;
         Encoder.Parameters params = new Encoder.Parameters().setQuality(quality);
         ByteArrayOutputStream baos = new ByteArrayOutputStream(inputText.length());
-        BrotliOutputStream out = new BrotliOutputStream(baos, params);
-        out.write(inputText.getBytes(charset));
-        out.flush();
-        out.close();
+        try (BrotliOutputStream out = new BrotliOutputStream(baos, params)) {
+            out.write(inputText.getBytes(charset));
+        }
         byte[] compressed = baos.toByteArray();
-        final ByteArrayInputStream bais = new ByteArrayInputStream(compressed);
-        BrotliInputStream brotliInputStream = new BrotliInputStream(bais);
-        String result = new String(brotliInputStream.readAllBytes(), charset);
-        assertEquals(inputText, result);
+        try (BrotliInputStream brotliInputStream = new BrotliInputStream(new ByteArrayInputStream(compressed))) {
+            String result = new String(brotliInputStream.readAllBytes(), charset);
+            assertEquals(inputText, result);
+        }
     }
 }

@@ -70,10 +70,10 @@ public class BrotliInputStreamTest {
         final String inputText = TestConstants.CONTENT;
         Encoder.Parameters params = new Encoder.Parameters().setQuality(quality);
         byte[] compressed = Encoder.compress(inputText.getBytes(charset), params);
-        final ByteArrayInputStream bais = new ByteArrayInputStream(compressed);
-        BrotliInputStream brotliInputStream = new BrotliInputStream(bais);
-        String result = new String(brotliInputStream.readAllBytes(), charset);
-        assertEquals(inputText, result);
+        try (BrotliInputStream brotliInputStream = new BrotliInputStream(new ByteArrayInputStream(compressed))) {
+            String result = new String(brotliInputStream.readAllBytes(), charset);
+            assertEquals(inputText, result);
+        }
     }
 
     @Test
@@ -81,12 +81,12 @@ public class BrotliInputStreamTest {
         final var charset = TestConstants.CHARSET;
         final String inputText = TestConstants.CONTENT;
         byte[] compressed = Encoder.compress(inputText.getBytes(charset), StandardCompressionOptions.brotli().parameters());
-        final ByteArrayInputStream bais = new ByteArrayInputStream(compressed);
-        BrotliInputStream brotliInputStream = new BrotliInputStream(bais);
         ByteArrayOutputStream result = new ByteArrayOutputStream();
-        int b;
-        while ((b = brotliInputStream.read()) != -1) {
-            result.write(b);
+        try (BrotliInputStream brotliInputStream = new BrotliInputStream(new ByteArrayInputStream(compressed))) {
+            int b;
+            while ((b = brotliInputStream.read()) != -1) {
+                result.write(b);
+            }
         }
         assertEquals(inputText, result.toString(charset));
     }
