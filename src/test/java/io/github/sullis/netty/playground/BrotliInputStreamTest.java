@@ -7,8 +7,11 @@ import io.netty.handler.codec.compression.Brotli;
 import io.netty.handler.codec.compression.StandardCompressionOptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -59,5 +62,33 @@ public class BrotliInputStreamTest {
         String result = new String(brotliInputStream.readAllBytes(), charset);
         assertEquals(inputText, result);
         assertTrue(compressed.length < inputText.length(), "Compressed data should be smaller than original");
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {0, 4, 6, 9, 11})
+    public void brotliInputStreamVariousQualityLevels(int quality) throws Exception {
+        final var charset = TestConstants.CHARSET;
+        final String inputText = TestConstants.CONTENT;
+        Encoder.Parameters params = new Encoder.Parameters().setQuality(quality);
+        byte[] compressed = Encoder.compress(inputText.getBytes(charset), params);
+        final ByteArrayInputStream bais = new ByteArrayInputStream(compressed);
+        BrotliInputStream brotliInputStream = new BrotliInputStream(bais);
+        String result = new String(brotliInputStream.readAllBytes(), charset);
+        assertEquals(inputText, result);
+    }
+
+    @Test
+    public void brotliInputStreamSingleByteReads() throws Exception {
+        final var charset = TestConstants.CHARSET;
+        final String inputText = TestConstants.CONTENT;
+        byte[] compressed = Encoder.compress(inputText.getBytes(charset), StandardCompressionOptions.brotli().parameters());
+        final ByteArrayInputStream bais = new ByteArrayInputStream(compressed);
+        BrotliInputStream brotliInputStream = new BrotliInputStream(bais);
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
+        int b;
+        while ((b = brotliInputStream.read()) != -1) {
+            result.write(b);
+        }
+        assertEquals(inputText, result.toString(charset));
     }
 }
